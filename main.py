@@ -124,7 +124,7 @@ class Cantininha():
         self.entry_obs.delete(0, tk.END)
 
     def connect(self):
-        con = sqlite3.connect('database.db')
+        con = sqlite3.connect('Cantina2\database.db')
         cursor = con.cursor()        
         return cursor, con
 
