@@ -115,7 +115,6 @@ class Cantininha():
         self.entry_data.delete(0, tk.END)
         self.entry_nome.delete(0, tk.END)
         self.entry_produto.delete(0, tk.END)
-        self.entry_total.delete(0, tk.END)
         self.entry_debito.delete(0, tk.END)
         self.entry_credito.delete(0, tk.END)
         self.entry_cargo.delete(0, tk.END)
