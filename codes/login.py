@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import sqlite3
 
-class Cantininha:
+class Cantininha: 
     
     def __init__(self):
         self.app = tk.Tk()
