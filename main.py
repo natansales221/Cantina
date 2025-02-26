@@ -163,7 +163,7 @@ class Cantininha():
             observacao = observacao
             
             query = """
-                INSERT INTO login_cantina (data, nome, produto, debito, credito, total, cargo, turma, telefone, observacao)
+                INSERT INTO cantina (data, nome, produto, debito, credito, total, cargo, turma, telefone, observacao)
                 VALUES (?,?,?,?,?,?,?,?,?,?)
             """
             params = (data, nome, produto, debito, credito, total, cargo, turma, telefone, observacao)
@@ -175,9 +175,9 @@ class Cantininha():
             print(f"Erro: {e}")
             raise
 
-    def run(self):
+    def main(self):
         self.app.mainloop()
 
 if __name__ == '__main__':
     service = Cantininha()
-    service.run()
+    service.main()
