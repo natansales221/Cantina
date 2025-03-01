@@ -2,7 +2,10 @@ import tkinter as tk
 from tkinter import ttk
 import sqlite3
 
-class Cantininha: 
+from InterationUser import InterationUser
+from InterationAdmin import InterationAdmin
+
+class LoginScreen: 
     
     def __init__(self):
         self.app = tk.Tk()
@@ -96,39 +99,50 @@ class Cantininha:
         AND sobrenome = (?)
             """
         params = (lost_name, lost_sobrenome)
-        cursor.execute(query, params)
         
-        login_novo = cursor.fetchall()[0][0]
+        if cursor.execute(query, params).rowcount == 1:
+            con.commit()
+            login_novo = cursor.fetchall()[0][0]
 
-        self.label_status.config(text=f"Seu usuário é {login_novo}")
-
-        # Close the forgotten user window
-        self.forgot_user_window.destroy()
-
+            self.label_status.config(text=f"Seu usuário é {login_novo}")
+            self.forgot_user_window.destroy()
+        else:
+            self.label_status.config(text="Não foi possível encontrar um usuário")
+            self.forgot_user_window.destroy()
+            
     def login_bt(self):
         cursor, con = self.connect()
         login = self.entry_login.get()
         password = self.entry_pswd.get()
         
         query = """
-                SELECT login, senha from login_cantina
+                SELECT login, senha, tipo from login_cantina
             """
         cursor.execute(query)
         
-        login_valid, password_valid = cursor.fetchall()[0]
+        login_valid, password_valid, tipo = cursor.fetchall()[0]
 
         if login == login_valid and password == password_valid:
             self.label_status.config(text="Login realizado com sucesso")
+            if tipo.upper() == 'ADMIN':
+                self.app.destroy()
+                tela = InterationAdmin()
+                tela.main()
+            elif tipo.upper() == 'USER':
+                self.app.destroy()
+                tela = InterationUser()
+                tela.main()
+            
         else:
             self.label_status.config(text="Login ou senha inválido!")
         
     def connect(self):
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect(r'db\database.db')
         cursor = conn.cursor()        
         return cursor, conn
 
     def criar(self):
-        con = sqlite3.connect('database.db')
+        con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()
 
         cursor.execute('''
@@ -148,7 +162,7 @@ class Cantininha:
                 VALUES (?,?,?,?,?,?)
             """
 
-        params = ('natan', 'sales', 'natansales', 'natansales2', 'admin', '30/09/2000')
+        params = ('admin', 'admin', 'admin', 'admin', 'admin', '30/09/2000')
         
         cursor.execute(query, params)
         
@@ -186,5 +200,5 @@ class Cantininha:
         
           
 if __name__ == '__main__':
-    service = Cantininha()
-    service.main()
+    service = LoginScreen()
+    service.criar()

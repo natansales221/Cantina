@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import sqlite3
 
-class Cantininha():
+class InsertInfo():
     
     def __init__(self):
         self.app = tk.Tk()
@@ -123,7 +123,7 @@ class Cantininha():
         self.entry_obs.delete(0, tk.END)
 
     def connect(self):
-        con = sqlite3.connect('Cantina2\database.db')
+        con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()        
         return cursor, con
 
@@ -178,5 +178,5 @@ class Cantininha():
         self.app.mainloop()
 
 if __name__ == '__main__':
-    service = Cantininha()
+    service = InsertInfo()
     service.main()

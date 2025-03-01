@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import sqlite3
 
-class Cantininha: 
+class InterationAdmin: 
     
     def __init__(self):
         self.app = tk.Tk()
@@ -37,7 +37,6 @@ class Cantininha:
             self.app.rowconfigure(i, weight=1)
         
     def view(self):
-        login = self.entry_login.get()
         # Open a new window for forgotten user
         self.forgot_pwd_window = tk.Toplevel(self.app)
         self.forgot_pwd_window.title("Recuperar Senha")
@@ -135,12 +134,12 @@ class Cantininha:
         login_valid, password_valid = cursor.fetchall()[0]
   
     def connect(self):
-        con = sqlite3.connect('db\database.db')
+        con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()        
         return cursor, con
 
     def criar(self):
-        con = sqlite3.connect('database.db')
+        con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()
 
         cursor.execute('''
@@ -301,5 +300,5 @@ class Cantininha:
             raise
         
 if __name__ == '__main__':
-    service = Cantininha()
+    service = InterationAdmin()
     service.main()
