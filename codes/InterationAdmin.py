@@ -4,6 +4,8 @@ import os
 import pandas as pd
 import sqlite3
 
+from InsertScreen import InsertInfo
+
 class InterationAdmin: 
     
     def __init__(self):
@@ -68,46 +70,8 @@ class InterationAdmin:
         return entry
 
     def insert(self):
-        
-        self.app = tk.Tk()
-        self.app.title("Formulário de Casos Abertos")
-        
-        style = ttk.Style()
-        style.configure("TButton", foreground="black", font=("Helvetica", 12))
-
-        # Configura as colunas para expandirem horizontalmente
-        self.app.columnconfigure(0, weight=1)
-        self.app.columnconfigure(1, weight=2)
-        self.app.columnconfigure(2, weight=1)
-
-        # Criando os campos e armazenando em atributos da classe
-        self.entry_data = self.create_entry_insert("Data", 0)
-        self.entry_nome = self.create_entry_insert("Nome", 1)
-        self.entry_produto = self.create_entry_insert("Produto", 2)
-        self.entry_debito = self.create_entry_insert("Débito", 3)
-        self.entry_credito = self.create_entry_insert("Crédito", 4)
-        self.entry_cargo = self.create_entry_insert("Cargo", 5)
-        self.entry_turma = self.create_entry_insert("Turma", 6)
-        self.entry_telefone = self.create_entry_insert("Telefone", 7)
-        self.entry_obs = self.create_entry_insert("Observação", 8)
-
-        # Botões
-        self.botao_excel = ttk.Button(self.app, text="Salvar Excel", command=self.salvar_geral)
-        self.botao_excel.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
-
-        self.botao_db = ttk.Button(self.app, text="Salvar Database", command=self.salvar_geral)
-        self.botao_db.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
-        
-        self.botao_erase = ttk.Button(self.app, text="Limpar campos", command=self.clear_fields)
-        self.botao_erase.grid(row=10, column=2, sticky="ew", padx=5, pady=5)
-
-        # Label de status
-        self.label_status = tk.Label(self.app, text="")
-        self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
-
-        # Configura todas as linhas para expandirem verticalmente
-        for i in range(12):  # Garante que todas as linhas se ajustem
-            self.app.rowconfigure(i, weight=1)
+        insert_info = InsertInfo()
+        insert_info.main()        
         
     def create_entry_in_window(self, label, row, window, is_password=False):
         tk.Label(window, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
@@ -268,7 +232,8 @@ class InterationAdmin:
             self.label_status.config(text= e)
           
     def salvar_geral(self):
-        self.salvar_xlsx()
+        insert_info = InsertInfo()
+        self.insert_info()
         self.salvar_db()
         self.clear_fields()
     

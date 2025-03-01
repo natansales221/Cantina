@@ -4,6 +4,8 @@ import os
 import pandas as pd
 import sqlite3
 
+from InsertScreen import InsertInfo
+
 class InterationUser: 
     
     def __init__(self):
