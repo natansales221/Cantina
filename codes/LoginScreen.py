@@ -117,9 +117,11 @@ class LoginScreen:
         
         query = """
                 SELECT login, senha, tipo from login_cantina
+                WHERE login = (?)
             """
-        cursor.execute(query)
-        
+        params = (login,)
+        cursor.execute(query, params)
+   
         login_valid, password_valid, tipo = cursor.fetchall()[0]
 
         if login == login_valid and password == password_valid:
@@ -201,4 +203,4 @@ class LoginScreen:
           
 if __name__ == '__main__':
     service = LoginScreen()
-    service.criar()
+    service.main()

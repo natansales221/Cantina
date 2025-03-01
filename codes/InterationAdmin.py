@@ -19,18 +19,30 @@ class InterationAdmin:
         self.app.columnconfigure(2, weight=1)
 
         # Criando os campos e armazenando em atributos da classe
-        self.entry_login = self.create_entry("Olá Usuário! O que deseja fazer?", 0)
+        self.entry_login = self.create_entry("Olá Admin! O que deseja fazer?", 0)
 
         # Botões
-        self.fgt_pswd = ttk.Button(self.app, text="Visualizar Resumo", command=self.view)
-        self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
-
         self.fgt_user = ttk.Button(self.app, text="Inserir informações", command=self.insert)
         self.fgt_user.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
         
+        self.fgt_pswd = ttk.Button(self.app, text="Visualizar Dados Resumidos", command=self.view)
+        self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
+        
+        self.fgt_pswd = ttk.Button(self.app, text="Editar Informações", command=self.insert)
+        self.fgt_pswd.grid(row=11, column=0, sticky="ew", padx=5, pady=5)
+
+        self.fgt_user = ttk.Button(self.app, text="Visualizar Dados Completos", command=self.view)
+        self.fgt_user.grid(row=11, column=1, sticky="ew", padx=5, pady=5)
+        
+        self.fgt_pswd = ttk.Button(self.app, text="Excluir Informações", command=self.insert)
+        self.fgt_pswd.grid(row=12, column=0, sticky="ew", padx=5, pady=5)
+
+        self.fgt_user = ttk.Button(self.app, text="Visualizar Dados Filtrados", command=self.view)
+        self.fgt_user.grid(row=12, column=1, sticky="ew", padx=5, pady=5)
+        
         # Label de status
         self.label_status = tk.Label(self.app, text="")
-        self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
+        self.label_status.grid(row=13, column=0, columnspan=3, sticky="ew")
 
         # Configura todas as linhas para expandirem verticalmente
         for i in range(12):
