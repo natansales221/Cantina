@@ -200,7 +200,7 @@ class LoginScreen:
             self.label_status.config(text="Não foi possível alterar a senha")
             self.forgot_pwd_window.destroy()
         
-          
+        
 if __name__ == '__main__':
     service = LoginScreen()
     service.main()
