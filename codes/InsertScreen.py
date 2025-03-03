@@ -181,3 +181,4 @@ class InsertInfo():
 if __name__ == '__main__':
     service = InsertInfo()
     service.main()
+    
