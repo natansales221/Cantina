@@ -4,11 +4,14 @@ import os
 import pandas as pd
 import sqlite3
 
+from LoginScreen import login_screen
+
+
 class LostPassword: 
     
     def __init__(self):
         self.app = tk.Tk()
-        self.app.title("Seleção de opções")
+        self.app.title("Alteração de senha")
         
         
         style = ttk.Style()
@@ -19,16 +22,10 @@ class LostPassword:
         self.app.columnconfigure(1, weight=2)
         self.app.columnconfigure(2, weight=1)
 
-        # Criando os campos e armazenando em atributos da classe
-        self.entry_login = self.create_entry("Olá Usuário! O que deseja fazer?", 0)
-
         # Botões
-        self.fgt_pswd = ttk.Button(self.app, text="Visualizar Resumo", command=self.view)
+        self.fgt_pswd = ttk.Button(self.app, text="Alterar Senha", command=self.submit_forgot_password)
         self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
 
-        self.fgt_user = ttk.Button(self.app, text="Inserir informações", command=self.insert)
-        self.fgt_user.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
-        
         self.entry_forgot_name = self.create_entry_in_window("Confirme seu nome", 2, self.app)
         self.entry_forgot_last_name = self.create_entry_in_window("Confirme seu sobrenome", 3, self.app)
         self.entry_forgot_date = self.create_entry_in_window("Confirme sua data de nascimento", 4, self.app)
@@ -176,10 +173,10 @@ class LostPassword:
         if cursor.execute(query, params).rowcount == 1:
             con.commit()
             self.label_status.config(text="Senha alterada!")
-            self.forgot_pwd_window.destroy()
+
         else:
             self.label_status.config(text="Não foi possível alterar a senha")
-            self.forgot_pwd_window.destroy()
+
      
     def create_entry_insert(self, label, row):
         tk.Label(self.app, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
