@@ -3,8 +3,16 @@ from tkinter import ttk
 import os
 import pandas as pd
 import sqlite3
+from datetime import datetime
 
 class EditInfo():
+    
+    @property
+    def caminhos(self):
+        return {
+            "excel":"db\\controle_estoque.xlsx",
+            "database":"db\\database.db"
+        }
     
     def __init__(self):
         self.app = tk.Tk()
@@ -47,12 +55,29 @@ class EditInfo():
         self.salvar_xlsx()
         self.salvar_db()
     
-    def create_entry(self, label, row):
+    def create_entry(self, label, row, default_value=""):
         tk.Label(self.app, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
         entry = tk.Entry(self.app)
-        entry.grid(row=row, column=1, columnspan=2, sticky="ew", padx=5, pady=5)  # Ocupa 2 colunas
+        entry.grid(row=row, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
+        entry.insert(0, default_value)  # Insere o valor padrão
         return entry
 
+    def formatar_data(self, *args):
+        """ Formata a entrada da data automaticamente (dd/mm/yyyy). """
+        texto = self.entry_data.get().replace("/", "")  # Remove barras existentes
+        if len(texto) > 8:
+            texto = texto[:8]  # Garante que não ultrapasse o formato correto
+
+        novo_texto = ""
+        for i, char in enumerate(texto):
+            if i in [2, 4]:  # Insere a barra nas posições corretas
+                novo_texto += "/"
+            novo_texto += char
+
+        # Atualiza o campo sem perder a posição do cursor
+        self.entry_data.delete(0, tk.END)
+        self.entry_data.insert(0, novo_texto)
+        
     def salvar_xlsx(self):
         data = self.entry_data.get()
         nome = self.entry_nome.get()
@@ -62,7 +87,7 @@ class EditInfo():
         debito = self.entry_debito.get()
         turma = self.entry_turma.get()
         novo_dado = pd.DataFrame([{
-            "Data": data,
+            "Data": datetime.strptime(data, '%d/%m/%Y'),
             "Nome": nome,
             "Produto": produto,
             "Débito": debito,
@@ -72,13 +97,13 @@ class EditInfo():
             "Turma": turma,
         }])
 
-        arquivo_excel = "db\controle_estoque.xlsx"
+        arquivo_excel = self.caminhos['excel']
 
         if os.path.exists(arquivo_excel):
             df_existente = pd.read_excel(arquivo_excel)
             filt_nome = df_existente[df_existente['Nome'] == nome]
             filt_prod = filt_nome[filt_nome['Produto'] == produto]
-            filt_data = filt_prod[filt_prod['Data'] == data]
+            filt_data = filt_prod[filt_prod['Data'] == datetime.strptime(data, '%d/%m/%Y')]
             filt_cargo = filt_data[filt_data['Cargo'] == cargo]
             filt_turma = filt_cargo[filt_cargo['Turma'] == turma]
             
@@ -90,7 +115,7 @@ class EditInfo():
 
             novo_dado = filt_turma
             df_final = pd.concat([df_filtrado, novo_dado], ignore_index=True)
-            df_final.reset_index(drop=True)
+            df_final = df_final.reset_index(drop=True)
         else:
             df_final = novo_dado
 
@@ -126,7 +151,7 @@ class EditInfo():
         self.entry_turma.delete(0, tk.END)
 
     def connect(self):
-        con = sqlite3.connect(r'db\database.db')
+        con = sqlite3.connect(self.caminhos['database'])
         cursor = con.cursor()        
         return cursor, con
 
@@ -153,7 +178,7 @@ class EditInfo():
     def atualizar(self, data, nome, produto, debito, credito, cargo, turma):
         try:
             cursor, con = self.connect()  # Obtém o cursor e a conexão
-            data = data
+            data = datetime.strptime(data, '%d/%m/%Y')
             nome = nome
             produto = produto
             debito = debito
@@ -185,7 +210,13 @@ class EditInfo():
             raise
 
     def main(self):
+        # Adicionando o 'trace' para formatação de data
+        self.entry_data_var = tk.StringVar()
+        self.entry_data.config(textvariable=self.entry_data_var)
+        self.entry_data_var.trace_add("write", self.formatar_data)
+        
         self.app.mainloop()
+
 
 if __name__ == '__main__':
     service = EditInfo()
