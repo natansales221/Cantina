@@ -55,7 +55,10 @@ class EditInfo():
             self.app.rowconfigure(i, weight=1)
             
     def deslogar(self):
-        print("deslogar") 
+        from LoginScreen import LoginService
+        self.app.destroy()
+        logout = LoginService()
+        logout.main()  
         
     def salvar_geral(self):
         self.salvar_xlsx()

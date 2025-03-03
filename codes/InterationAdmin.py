@@ -56,7 +56,10 @@ class InterationAdmin:
             self.app.rowconfigure(i, weight=1)
             
     def deslogar(self):
-        print("deslogar") 
+        from LoginScreen import LoginService
+        self.app.destroy()
+        logout = LoginService()
+        logout.main()  
                                   
     def create_entry(self, label, row):
         tk.Label(self.app, text=label, anchor="center").grid(row=row, column=0, sticky="ew", padx=5, pady=5)

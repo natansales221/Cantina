@@ -5,7 +5,7 @@ import sqlite3
 from InterationUser import InterationUser
 from InterationAdmin import InterationAdmin
 
-class LoginScreen: 
+class LoginService: 
     
     def __init__(self):
         self.app = tk.Tk()
@@ -121,21 +121,23 @@ class LoginScreen:
             """
         params = (login,)
         cursor.execute(query, params)
-   
-        login_valid, password_valid, tipo = cursor.fetchall()[0]
+        try:
+            login_valid, password_valid, tipo = cursor.fetchall()[0]
 
-        if login == login_valid and password == password_valid:
-            self.label_status.config(text="Login realizado com sucesso")
-            if tipo.upper() == 'ADMIN':
-                self.app.destroy()
-                tela = InterationAdmin()
-                tela.main()
-            elif tipo.upper() == 'USER':
-                self.app.destroy()
-                tela = InterationUser()
-                tela.main()
-            
-        else:
+            if login == login_valid and password == password_valid:
+                self.label_status.config(text="Login realizado com sucesso")
+                if tipo.upper() == 'ADMIN':
+                    self.app.destroy()
+                    tela = InterationAdmin()
+                    tela.main()
+                elif tipo.upper() == 'USER':
+                    self.app.destroy()
+                    tela = InterationUser()
+                    tela.main()
+                
+            else:
+                self.label_status.config(text="Login ou senha inválido!")
+        except:
             self.label_status.config(text="Login ou senha inválido!")
         
     def connect(self):
@@ -202,6 +204,6 @@ class LoginScreen:
         
         
 if __name__ == '__main__':
-    service = LoginScreen()
+    service = LoginService()
     service.main()
     
