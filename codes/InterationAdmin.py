@@ -5,6 +5,7 @@ import pandas as pd
 import sqlite3
 
 from InsertScreen import InsertInfo
+from EditScreen import EditInfo
 
 class InterationAdmin: 
     
@@ -60,13 +61,10 @@ class InterationAdmin:
         insert_info = InsertInfo()
         insert_info.main()        
 
-    def connect(self):
-        con = sqlite3.connect(r'db\database.db')
-        cursor = con.cursor()        
-        return cursor, con
-
     def edit_info(self):
-        print("edit")
+        self.app.destroy()
+        edit_info = EditInfo()
+        edit_info.main()  
         
     def excluir_info(self):
         print("excluir")
