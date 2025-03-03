@@ -204,3 +204,4 @@ class LoginScreen:
 if __name__ == '__main__':
     service = LoginScreen()
     service.main()
+    
