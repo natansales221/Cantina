@@ -70,9 +70,10 @@ class InterationAdmin:
         return entry
 
     def insert(self):
+        self.app.destroy()
         insert_info = InsertInfo()
         insert_info.main()        
-        
+                
     def create_entry_in_window(self, label, row, window, is_password=False):
         tk.Label(window, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
         entry = tk.Entry(window, show="*" if is_password else "")
