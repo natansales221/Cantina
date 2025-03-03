@@ -177,6 +177,7 @@ class InsertInfo():
     def main(self):
         self.app.mainloop()
 
+
 if __name__ == '__main__':
     service = InsertInfo()
     service.main()
