@@ -6,6 +6,7 @@ import sqlite3
 
 from InsertScreen import InsertInfo
 from EditScreen import EditInfo
+from DeleteScreen import DeleteInfo
 
 class InterationAdmin: 
     
@@ -43,6 +44,9 @@ class InterationAdmin:
         self.fgt_user = ttk.Button(self.app, text="Visualizar Dados Filtrados", command=self.view_filtro)
         self.fgt_user.grid(row=12, column=1, sticky="ew", padx=5, pady=5)
         
+        self.fgt_user = ttk.Button(self.app, text="logout", command=self.deslogar)
+        self.fgt_user.grid(row=15, column=1, sticky="ew", padx=5, pady=5)
+        
         # Label de status
         self.label_status = tk.Label(self.app, text="")
         self.label_status.grid(row=13, column=0, columnspan=3, sticky="ew")
@@ -50,7 +54,10 @@ class InterationAdmin:
         # Configura todas as linhas para expandirem verticalmente
         for i in range(12):
             self.app.rowconfigure(i, weight=1)
-                            
+            
+    def deslogar(self):
+        print("deslogar") 
+                                  
     def create_entry(self, label, row):
         tk.Label(self.app, text=label, anchor="center").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
         entry = tk.Entry(self.app)
@@ -67,7 +74,9 @@ class InterationAdmin:
         edit_info.main()  
         
     def excluir_info(self):
-        print("excluir")
+        self.app.destroy()
+        edit_info = DeleteInfo()
+        edit_info.main()  
         
     def view_resumo(self):
         print("view resumo")

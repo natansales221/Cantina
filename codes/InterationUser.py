@@ -30,6 +30,9 @@ class InterationUser:
         self.fgt_user = ttk.Button(self.app, text="Inserir informações", command=self.insert)
         self.fgt_user.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
         
+        self.fgt_user = ttk.Button(self.app, text="logout", command=self.deslogar)
+        self.fgt_user.grid(row=15, column=1, sticky="ew", padx=5, pady=5)
+        
         # Label de status
         self.label_status = tk.Label(self.app, text="")
         self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
@@ -37,7 +40,10 @@ class InterationUser:
         # Configura todas as linhas para expandirem verticalmente
         for i in range(12):
             self.app.rowconfigure(i, weight=1)
-        
+            
+    def deslogar(self):
+        print("deslogar")
+           
     def view_resumed_info(self):
         print("view resumed info")
                     

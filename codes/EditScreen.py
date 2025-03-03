@@ -16,7 +16,7 @@ class EditInfo():
     
     def __init__(self):
         self.app = tk.Tk()
-        self.app.title("Formulário de Casos Abertos")
+        self.app.title("Edição de informações")
         
         style = ttk.Style()
         style.configure("TButton", foreground="black", font=("Helvetica", 12))
@@ -42,6 +42,9 @@ class EditInfo():
         
         self.botao_erase = ttk.Button(self.app, text="Limpar campos", command=self.clear_fields)
         self.botao_erase.grid(row=10, column=2, sticky="ew", padx=5, pady=5)
+        
+        self.fgt_user = ttk.Button(self.app, text="logout", command=self.deslogar)
+        self.fgt_user.grid(row=15, column=2, sticky="ew", padx=5, pady=5)
 
         # Label de status
         self.label_status = tk.Label(self.app, text="")
@@ -50,6 +53,9 @@ class EditInfo():
         # Configura todas as linhas para expandirem verticalmente
         for i in range(12):  # Garante que todas as linhas se ajustem
             self.app.rowconfigure(i, weight=1)
+            
+    def deslogar(self):
+        print("deslogar") 
         
     def salvar_geral(self):
         self.salvar_xlsx()

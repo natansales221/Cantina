@@ -9,7 +9,7 @@ class LoginScreen:
     
     def __init__(self):
         self.app = tk.Tk()
-        self.app.title("Formulário de Casos Abertos")
+        self.app.title("Login")
         
         style = ttk.Style()
         style.configure("TButton", foreground="black", font=("Helvetica", 12))
