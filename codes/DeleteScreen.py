@@ -178,9 +178,12 @@ class DeleteInfo():
             
             if cursor.execute(query, params).rowcount == 1:
                 con.commit()
+                con.close()
                 return True
             else:
+                con.close()
                 return False
+            
                 
         except Exception as e:
             print(f"Erro: {e}")

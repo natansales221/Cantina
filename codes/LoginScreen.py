@@ -41,11 +41,7 @@ class LoginService:
         for i in range(12):
             self.app.rowconfigure(i, weight=1)
         
-    def lost_password(self):
-        login = self.entry_login.get()
-        password = self.entry_pswd.get()
-        print(f"Usuário: {login}, Senha: {password}")
-        
+    def lost_password(self):       
         # Open a new window for forgotten user
         self.forgot_pwd_window = tk.Toplevel(self.app)
         self.forgot_pwd_window.title("Recuperar Senha")
@@ -179,28 +175,34 @@ class LoginService:
         self.app.mainloop()
         
     def submit_forgot_password(self):
-        cursor, con = self.connect()
-        lost_name = self.entry_forgot_name.get()
-        lost_sobrenome = self.entry_forgot_last_name.get()
-        date = self.entry_forgot_date.get()
-        pwd = self.entry_forgot_password.get()
-        
-        query = """
-        UPDATE login_cantina
-        SET senha = ?
-        WHERE nome = ?
-        AND sobrenome = ? 
-        AND nascimento = ?
-        """
-        params = (pwd, lost_name, lost_sobrenome, date)
-        
-        if cursor.execute(query, params).rowcount == 1:
-            con.commit()
-            self.label_status.config(text="Senha alterada!")
-            self.forgot_pwd_window.destroy()
-        else:
+        try:
+            cursor, con = self.connect()
+            lost_name = self.entry_forgot_name.get()
+            lost_sobrenome = self.entry_forgot_last_name.get()
+            date = self.entry_forgot_date.get()
+            pwd = self.entry_forgot_password.get()
+            
+            query = """
+            UPDATE login_cantina
+            SET senha = ?
+            WHERE nome = ?
+            AND sobrenome = ? 
+            AND nascimento = ?
+            """
+            params = (pwd, lost_name, lost_sobrenome, date)
+            
+            if cursor.execute(query, params).rowcount == 1:
+                con.commit()
+                self.label_status.config(text="Senha alterada!")
+                self.forgot_pwd_window.destroy()
+            else:
+                self.label_status.config(text="Não foi possível alterar a senha")
+                self.forgot_pwd_window.destroy()
+            con.close()
+        except:
             self.label_status.config(text="Não foi possível alterar a senha")
             self.forgot_pwd_window.destroy()
+            con.close()
         
         
 if __name__ == '__main__':

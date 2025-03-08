@@ -91,25 +91,14 @@ class InterationUser:
         cursor.execute(query, params)
         
         con.commit()
+        con.close()
         
         # cursor.execute('drop table login_cantina')
         print("Tabela criada com sucesso")
 
     def main(self):
         self.app.mainloop()
-              
-    def clear_fields(self):
-        """Limpa todos os campos de entrada."""
-        self.entry_data.delete(0, tk.END)
-        self.entry_nome.delete(0, tk.END)
-        self.entry_produto.delete(0, tk.END)
-        self.entry_debito.delete(0, tk.END)
-        self.entry_credito.delete(0, tk.END)
-        self.entry_cargo.delete(0, tk.END)
-        self.entry_turma.delete(0, tk.END)
-        self.entry_telefone.delete(0, tk.END)
-        self.entry_obs.delete(0, tk.END)
-        
+                
 if __name__ == '__main__':
     service = InterationUser()
     service.main()

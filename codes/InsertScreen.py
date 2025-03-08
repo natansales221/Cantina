@@ -180,6 +180,7 @@ class InsertInfo():
             );
         ''')
         print("Tabela criada com sucesso")
+        con.close()
 
     def inserir(self, data, nome, produto, debito, credito, cargo, turma, telefone, observacao):
         try:
@@ -203,6 +204,7 @@ class InsertInfo():
             
             cursor.execute(query, params)
             con.commit()
+            con.close()
             print("Finalizado com sucesso")
         except Exception as e:
             print(f"Erro: {e}")
