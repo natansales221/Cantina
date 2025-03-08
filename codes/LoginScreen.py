@@ -61,12 +61,7 @@ class LoginService:
         entry.grid(row=row, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
         return entry
 
-    def lost_user(self):
-        
-        login = self.entry_login.get()
-        password = self.entry_pswd.get()
-        print(f"Usuário: {login}, Senha: {password}")
-        
+    def lost_user(self):        
         # Open a new window for forgotten user
         self.forgot_user_window = tk.Toplevel(self.app)
         self.forgot_user_window.title("Recuperar Usuário")
@@ -96,7 +91,7 @@ class LoginService:
             """
         params = (lost_name, lost_sobrenome)
         
-        if cursor.execute(query, params).rowcount == 1:
+        if cursor.execute(query, params).rowcount != 0:
             con.commit()
             login_novo = cursor.fetchall()[0][0]
 
@@ -124,11 +119,11 @@ class LoginService:
                 self.label_status.config(text="Login realizado com sucesso")
                 if tipo.upper() == 'ADMIN':
                     self.app.destroy()
-                    tela = InterationAdmin()
+                    tela = InterationAdmin(tipo)
                     tela.main()
                 elif tipo.upper() == 'USER':
                     self.app.destroy()
-                    tela = InterationUser()
+                    tela = InterationUser(tipo)
                     tela.main()
                 
             else:

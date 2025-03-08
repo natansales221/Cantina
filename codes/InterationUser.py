@@ -8,7 +8,7 @@ from InsertScreen import InsertInfo
 
 class InterationUser: 
     
-    def __init__(self):
+    def __init__(self, tipo):
         self.app = tk.Tk()
         self.app.title("Seleção de opções")
         
@@ -27,11 +27,11 @@ class InterationUser:
         self.fgt_pswd = ttk.Button(self.app, text="Visualizar Resumo", command=self.view_resumed_info)
         self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
 
-        self.fgt_user = ttk.Button(self.app, text="Inserir informações", command=self.insert)
+        self.fgt_user = ttk.Button(self.app, text="Inserir informações", command=lambda: self.insert(tipo))
         self.fgt_user.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
         
-        self.fgt_user = ttk.Button(self.app, text="logout", command=self.deslogar)
-        self.fgt_user.grid(row=15, column=1, sticky="ew", padx=5, pady=5)
+        self.back = ttk.Button(self.app, text="logout", command=self.deslogar)
+        self.back.grid(row=15, column=1, sticky="ew", padx=5, pady=5)
         
         # Label de status
         self.label_status = tk.Label(self.app, text="")
@@ -55,9 +55,9 @@ class InterationUser:
         entry = tk.Entry(self.app)
         return entry
 
-    def insert(self):
+    def insert(self, tipo):
         self.app.destroy()
-        insert_info = InsertInfo()
+        insert_info = InsertInfo(tipo)
         insert_info.main()  
         
     def connect(self):

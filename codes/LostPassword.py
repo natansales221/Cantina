@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import sqlite3
 
-from LoginScreen import login_screen
+from LoginScreen import LoginService
 
 
 class LostPassword: 

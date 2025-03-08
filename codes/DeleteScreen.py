@@ -14,7 +14,7 @@ class DeleteInfo():
             "database":"db\\database.db"
         }
     
-    def __init__(self):
+    def __init__(self, tipo):
         self.app = tk.Tk()
         self.app.title("Exclusão de informações")
         
@@ -43,6 +43,9 @@ class DeleteInfo():
         self.fgt_user = ttk.Button(self.app, text="logout", command=self.deslogar)
         self.fgt_user.grid(row=15, column=2, sticky="ew", padx=5, pady=5)
         
+        self.fgt_user = ttk.Button(self.app, text="Voltar", command=lambda: self.retornar(tipo))
+        self.fgt_user.grid(row=15, column=1, sticky="ew", padx=5, pady=5)
+        
         # Label de status
         self.label_status = tk.Label(self.app, text="")
         self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
@@ -50,7 +53,20 @@ class DeleteInfo():
         # Configura todas as linhas para expandirem verticalmente
         for i in range(12):  # Garante que todas as linhas se ajustem
             self.app.rowconfigure(i, weight=1)
-            
+
+    def retornar(self, tipo):
+        if tipo.upper() == 'ADMIN':
+            from InterationAdmin import InterationAdmin
+            self.app.destroy()
+            logout = InterationAdmin(tipo)
+            logout.main() 
+
+        if tipo.upper() == 'USER':
+            from InterationUser import InterationUser
+            self.app.destroy()
+            logout = InterationUser(tipo)
+            logout.main() 
+                   
     def deslogar(self):
         from LoginScreen import LoginService
         self.app.destroy()
