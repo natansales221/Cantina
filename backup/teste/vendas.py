@@ -24,16 +24,16 @@ class AddProd:
         self.produtos_adicionados = []
 
         # Conectar ao banco de dados SQLite
-        self.conn = sqlite3.connect("cantina.db")
+        self.conn = sqlite3.connect("produtos.db")
         self.cursor = self.conn.cursor()
 
         # Criar a tabela de produtos, se não existir
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS produtos (
-                cod_prod TEXT PRIMARY KEY AUTOINCREMENT,
-                nome_prod TEXT NOT NULL,
-                valor_prod REAL NOT NULL,
-                tipo_prod TEXT NOT NULL
+                cod_prod TEXT PRIMARY KEY,
+                nome_prod TEXT,
+                valor_prod REAL,
+                tipo_prod TEXT
             )
         """)
         self.conn.commit()
@@ -99,7 +99,7 @@ class AddProd:
             if produto_existente:
                 # Atualiza o produto no banco de dados
                 self.cursor.execute("""
-                    UPDATE cantina
+                    UPDATE produtos
                     SET nome_prod = ?, valor_prod = ?, tipo_prod = ?
                     WHERE cod_prod = ?
                 """, (nome, valor, tipo, cod))
@@ -115,7 +115,7 @@ class AddProd:
                 """, (cod, nome, valor, tipo))
                 messagebox.showinfo("Sucesso", f"Produto '{nome}' adicionado com sucesso!")
 
-            # Confirma as alterações no bancos
+            # Confirma as alterações no banco
             self.conn.commit()
 
             # Atualiza a lista de produtos no frame

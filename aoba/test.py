@@ -3,15 +3,19 @@ import customtkinter as ctk
 
 # Função para carregar produtos filtrados
 def carregar_produtos():
-    tipo_prod = combo_categoria.get()  # Pegando valor do ComboBox
+    produto = combo_categoria.get()  # Pegando valor do ComboBox
     conn = sqlite3.connect("cantina.db")
     cursor = conn.cursor()
+    produtinhos = {"codigo": "cod_prod","nome": "nome_prod", "valor": "valor_prod", "tipo": "tipo_prod"}
+    
 
     # Se a categoria for "Todos", busca tudo, senão filtra pela categoria escolhida
-    if categoria == "Todos":
+    if produto == "Todos":
         cursor.execute("SELECT nome_prod, valor_prod FROM produtos")
+    elif produto == "nome":
+        cursor.execute("SELECT nome_prod FROM produtos")
     else:
-        cursor.execute("SELECT nome_prod, valor_prod FROM produtos WHERE tipo_prod = ?", (tipo_prod,))
+        cursor.execute("SELECT nome_prod, valor_prod FROM produtos WHERE ? = ?", (produto, produto))
     
     produtos = cursor.fetchall()
     conn.close()
@@ -36,7 +40,7 @@ label = ctk.CTkLabel(root, text="Filtrar por Categoria:", font=("Arial", 14))
 label.pack(pady=10)
 
 # Criar ComboBox com as opções de filtro
-combo_categoria = ctk.CTkComboBox(root, values=["Todos", "Alimentos", "Limpeza", "Bebidas"], command=lambda event: carregar_produtos())
+combo_categoria = ctk.CTkComboBox(root, values=["codigo", "nome", "valor", "tipo"], command=lambda event: carregar_produtos())
 combo_categoria.pack()
 combo_categoria.set("Todos")  # Define a opção inicial como "Todos"
 

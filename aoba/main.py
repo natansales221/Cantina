@@ -30,10 +30,10 @@ class AddProd:
         # Criar a tabela de produtos, se não existir
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS produtos (
-                cod_prod TEXT PRIMARY KEY AUTOINCREMENT,
-                nome_prod TEXT NOT NULL,
-                valor_prod REAL NOT NULL,
-                tipo_prod TEXT NOT NULL
+                cod_prod TEXT PRIMARY KEY ,
+                nome_prod TEXT ,
+                valor_prod REAL ,
+                tipo_prod TEXT 
             )
         """)
         self.conn.commit()
