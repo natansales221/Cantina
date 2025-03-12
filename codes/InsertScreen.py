@@ -154,7 +154,7 @@ class InsertInfo():
         telefone = self.entry_telefone.get()
         observacao = self.entry_obs.get()
         try:
-            self.inserir(datetime.strptime(data, '%d/%m/%Y'), nome, produto, debito, credito, cargo, turma, telefone, observacao)
+            self.inserir(data, nome, produto, debito, credito, cargo, turma, telefone, observacao)
             print("Dados salvos no banco!")
             self.label_status.config(text="Dados salvos no banco!")
         except Exception as e:
