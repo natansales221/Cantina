@@ -1,103 +1,82 @@
-import tkinter as tk
-from tkinter import ttk
+import customtkinter as ctk
 import sqlite3
-
 from InterationUser import InterationUser
 from InterationAdmin import InterationAdmin
 
-class LoginService: 
+class LoginService:
     
     def __init__(self):
-        self.app = tk.Tk()
-        self.app.title("Login")
-        
-        style = ttk.Style()
-        style.configure("TButton", foreground="black", font=("Helvetica", 12))
+        ctk.set_appearance_mode("dark")  # Define o tema escuro
+        ctk.set_default_color_theme("blue")
 
-        self.app.columnconfigure(0, weight=1)
-        self.app.columnconfigure(1, weight=2)
-        self.app.columnconfigure(2, weight=1)
+        self.app = ctk.CTk()
+        self.app.title("Login")
+        self.app.geometry("450x150")
 
         self.entry_login = self.create_entry("Login", 0)
         self.entry_pswd = self.create_entry("Senha", 1, is_password=True)
-
-        self.fgt_pswd = ttk.Button(self.app, text="Esqueci a senha", command=self.lost_password)
-        self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
-
-        self.fgt_user = ttk.Button(self.app, text="Esqueci o usuario", command=self.lost_user)
-        self.fgt_user.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
         
-        self.login_button = ttk.Button(self.app, text="Login", command=self.login_bt)
-        self.login_button.grid(row=10, column=2, sticky="ew", padx=5, pady=5)
-
-        self.label_status = tk.Label(self.app, text="")
-        self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
-
-        for i in range(12):
-            self.app.rowconfigure(i, weight=1)
+        self.fgt_pswd = ctk.CTkButton(self.app, text="Esqueci a senha", command=self.lost_password)
+        self.fgt_pswd.grid(row=10, column=1, padx=5, pady=5)
         
-    def lost_password(self): 
+        self.fgt_user = ctk.CTkButton(self.app, text="Esqueci o usuário", command=self.lost_user)
+        self.fgt_user.grid(row=10, column=0, padx=5, pady=5)
+        
+        self.login_button = ctk.CTkButton(self.app, text="Login", command=self.login_bt)
+        self.login_button.grid(row=10, column=2, padx=5, pady=5)
+        
+        self.label_status = ctk.CTkLabel(self.app, text="", fg_color="transparent")
+        self.label_status.grid(row=11, column=0, columnspan=3, padx=5, pady=5)
+
+    def create_entry(self, label, row, is_password=False):
+        ctk.CTkLabel(self.app, text=label + ":").grid(row=row, column=0, padx=5, pady=5)
+        entry = ctk.CTkEntry(self.app, show="*" if is_password else "")
+        entry.grid(row=row, column=1, columnspan=2, padx=5, pady=5)
+        return entry
+
+    def lost_password(self):
         from LostPassword import LostPassword
         self.app.destroy()
         lost_password = LostPassword()
-        lost_password.main()  
-              
-        # # Open a new window for forgotten user
-        # self.forgot_pwd_window = tk.Toplevel(self.app)
-        # self.forgot_pwd_window.title("Recuperar Senha")
-
-        # # Create new fields for forgotten user window
-        # self.entry_forgot_name = self.create_entry_in_window("Confirme seu nome", 0, self.forgot_pwd_window)
-        # self.entry_forgot_last_name = self.create_entry_in_window("Confirme seu sobrenome", 1, self.forgot_pwd_window)
-        # self.entry_forgot_date = self.create_entry_in_window("Confirme sua data de nascimento", 2, self.forgot_pwd_window)
-        # self.entry_forgot_password = self.create_entry_in_window("Senha Nova", 3, self.forgot_pwd_window, is_password=True)
-
-        # self.submit_button = ttk.Button(self.forgot_pwd_window, text="Enviar", command=self.submit_forgot_password)
-        # self.submit_button.grid(row=4, column=0, columnspan=3, sticky="ew", padx=5, pady=5)
-                    
-    def create_entry(self, label, row, is_password=False):
-        tk.Label(self.app, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
-        entry = tk.Entry(self.app, show="*" if is_password else "")
-        entry.grid(row=row, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
-        return entry
-
+        lost_password.main()
+    
     def lost_user(self):        
-        self.forgot_user_window = tk.Toplevel(self.app)
+        self.forgot_user_window = ctk.CTkToplevel(self.app)
         self.forgot_user_window.title("Recuperar Usuário")
 
         self.entry_forgot_name = self.create_entry_in_window("Nome", 0, self.forgot_user_window)
         self.entry_forgot_last_name = self.create_entry_in_window("Sobrenome", 1, self.forgot_user_window)
         
-        self.submit_button = ttk.Button(self.forgot_user_window, text="Enviar", command=self.submit_forgot_user)
-        self.submit_button.grid(row=2, column=0, columnspan=3, sticky="ew", padx=5, pady=5)
-        
+        self.submit_button = ctk.CTkButton(self.forgot_user_window, text="Enviar", command=self.submit_forgot_user)
+        self.submit_button.grid(row=2, column=0, columnspan=3, padx=5, pady=5)
+    
     def create_entry_in_window(self, label, row, window, is_password=False):
-        tk.Label(window, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
-        entry = tk.Entry(window, show="*" if is_password else "")
-        entry.grid(row=row, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
+        ctk.CTkLabel(window, text=label + ":").grid(row=row, column=0, padx=5, pady=5)
+        entry = ctk.CTkEntry(window, show="*" if is_password else "")
+        entry.grid(row=row, column=1, columnspan=2, padx=5, pady=5)
         return entry
-
+    
     def submit_forgot_user(self):
         cursor, con = self.connect()
         lost_name = self.entry_forgot_name.get()
         lost_sobrenome = self.entry_forgot_last_name.get()
         
-        query = """
-        SELECT login from login_cantina
-        WHERE nome = (?)
-        AND sobrenome = (?)
-            """
+        query = "SELECT login FROM login_cantina WHERE nome = ? AND sobrenome = ?"
         params = (lost_name, lost_sobrenome)
         
-        if cursor.execute(query, params).rowcount != 0:
-            con.commit()
-            login_novo = cursor.fetchall()[0][0]
-
-            self.label_status.config(text=f"Seu usuário é {login_novo}")
-            self.forgot_user_window.destroy()
+        cursor.execute(query, params)
+        result = cursor.fetchone()
+        
+        if result:
+            self.label_status.configure(text=f"Seu usuário é {result[0]}")
         else:
-            self.label_status.config(text="Não foi possível encontrar um usuário")
-            self.forgot_user_window.destroy()
+            self.label_status.configure(text="Usuário não encontrado")
+        self.forgot_user_window.destroy()
+        
+    def connect(self):
+        conn = sqlite3.connect(r'db\database.db')
+        cursor = conn.cursor()        
+        return cursor, conn
             
     def login_bt(self):
         cursor, con = self.connect()
@@ -111,10 +90,10 @@ class LoginService:
         params = (login,)
         cursor.execute(query, params)
         try:
-            login_valid, password_valid, tipo = cursor.fetchall()[0]
+            login_valid, password_valid, tipo = cursor.fetchone()
 
             if login == login_valid and password == password_valid:
-                self.label_status.config(text="Login realizado com sucesso")
+                self.label_status.configure(text="Login realizado com sucesso")
                 if tipo.upper() == 'ADMIN':
                     self.app.destroy()
                     tela = InterationAdmin(tipo)
@@ -123,17 +102,11 @@ class LoginService:
                     self.app.destroy()
                     tela = InterationUser(tipo)
                     tela.main()
-                
             else:
-                self.label_status.config(text="Login ou senha inválido!")
+                self.label_status.configure(text="Login ou senha inválido!")
         except:
-            self.label_status.config(text="Login ou senha inválido!")
-        
-    def connect(self):
-        conn = sqlite3.connect(r'db\database.db')
-        cursor = conn.cursor()        
-        return cursor, conn
-
+            self.label_status.configure(text="Login ou senha inválido!")
+            
     def criar(self):
         con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()
@@ -166,38 +139,7 @@ class LoginService:
 
     def main(self):
         self.app.mainloop()
-        
-    # def submit_forgot_password(self):
-    #     try:
-    #         cursor, con = self.connect()
-    #         lost_name = self.entry_forgot_name.get()
-    #         lost_sobrenome = self.entry_forgot_last_name.get()
-    #         date = self.entry_forgot_date.get()
-    #         pwd = self.entry_forgot_password.get()
-            
-    #         query = """
-    #         UPDATE login_cantina
-    #         SET senha = ?
-    #         WHERE nome = ?
-    #         AND sobrenome = ? 
-    #         AND nascimento = ?
-    #         """
-    #         params = (pwd, lost_name, lost_sobrenome, date)
-            
-    #         if cursor.execute(query, params).rowcount == 1:
-    #             con.commit()
-    #             self.label_status.config(text="Senha alterada!")
-    #             self.forgot_pwd_window.destroy()
-    #         else:
-    #             self.label_status.config(text="Não foi possível alterar a senha")
-    #             self.forgot_pwd_window.destroy()
-    #         con.close()
-    #     except:
-    #         self.label_status.config(text="Não foi possível alterar a senha")
-    #         self.forgot_pwd_window.destroy()
-    #         con.close()
-        
-        
+             
 if __name__ == '__main__':
     service = LoginService()
     service.main()

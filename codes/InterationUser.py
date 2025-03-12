@@ -1,65 +1,50 @@
-import tkinter as tk
-from tkinter import ttk
-import os
-import pandas as pd
+import customtkinter as ctk
 import sqlite3
-
 from InsertScreen import InsertInfo
 
 class InterationUser: 
     
     def __init__(self, tipo):
-        self.app = tk.Tk()
+        ctk.set_appearance_mode("dark")  # Define o tema escuro
+        ctk.set_default_color_theme("blue")
+
+        self.app = ctk.CTk()
         self.app.title("Seleção de opções")
+        self.app.geometry("400x300")
+
+        self.label_title = ctk.CTkLabel(self.app, text="Olá Usuário! O que deseja fazer?", font=("Helvetica", 14))
+        self.label_title.pack(pady=10)
+
+        self.view_button = ctk.CTkButton(self.app, text="Visualizar Resumo", command=self.view_resumed_info)
+        self.view_button.pack(pady=5)
         
-        style = ttk.Style()
-        style.configure("TButton", foreground="black", font=("Helvetica", 12))
-
-        self.app.columnconfigure(0, weight=1)
-        self.app.columnconfigure(1, weight=2)
-        self.app.columnconfigure(2, weight=1)
-
-        self.entry_login = self.create_entry("Olá Usuário! O que deseja fazer?", 0)
-
-        self.fgt_pswd = ttk.Button(self.app, text="Visualizar Resumo", command=self.view_resumed_info)
-        self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
-
-        self.fgt_user = ttk.Button(self.app, text="Inserir informações", command=lambda: self.insert(tipo))
-        self.fgt_user.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
+        self.insert_button = ctk.CTkButton(self.app, text="Inserir informações", command=lambda: self.insert(tipo))
+        self.insert_button.pack(pady=5)
         
-        self.back = ttk.Button(self.app, text="logout", command=self.deslogar)
-        self.back.grid(row=15, column=1, sticky="ew", padx=5, pady=5)
-
-        self.label_status = tk.Label(self.app, text="")
-        self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
-
-        for i in range(12):
-            self.app.rowconfigure(i, weight=1)
-            
+        self.logout_button = ctk.CTkButton(self.app, text="Logout", command=self.deslogar)
+        self.logout_button.pack(pady=5)
+        
+        self.label_status = ctk.CTkLabel(self.app, text="", fg_color="transparent")
+        self.label_status.pack(pady=5)
+    
     def deslogar(self):
         from LoginScreen import LoginService
         self.app.destroy()
         logout = LoginService()
-        logout.main()  
-           
+        logout.main()
+    
     def view_resumed_info(self):
-        print("view resumed info")
-                    
-    def create_entry(self, label, row):
-        tk.Label(self.app, text=label, anchor="center").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
-        entry = tk.Entry(self.app)
-        return entry
-
+        print("Visualizando resumo de informações")
+    
     def insert(self, tipo):
         self.app.destroy()
         insert_info = InsertInfo(tipo)
-        insert_info.main()  
-        
+        insert_info.main()
+    
     def connect(self):
         con = sqlite3.connect(r'db\database.db')
-        cursor = con.cursor()        
+        cursor = con.cursor()
         return cursor, con
-
     def criar(self):
         con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()
