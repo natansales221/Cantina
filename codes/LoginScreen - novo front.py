@@ -35,7 +35,6 @@ class LoginService:
         style = ttk.Style()
         style.configure("TButton", foreground="black", font=("Helvetica", 12))
 
-        # Configura as colunas para expandirem horizontalmente
         self.app.columnconfigure(0, weight=1)
         self.app.columnconfigure(1, weight=2)
         self.app.columnconfigure(2, weight=1)
@@ -54,7 +53,6 @@ class LoginService:
         linkS.place(x=140, y=310)
         linkS.bind("<Button-1>", lambda event: self.lost_password())
 
-        # Botões
         # self.fgt_pswd = ttk.Button(self.app, text="Esqueci a senha", command=self.lost_password)
         # self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
 
@@ -64,20 +62,16 @@ class LoginService:
         # self.login_button = ttk.Button(self.app, text="Login", command=self.login_bt)
         # self.login_button.grid(row=10, column=2, sticky="ew", padx=5, pady=5)
 
-        # Label de status
         self.label_status = tk.Label(self.app, text="")
         self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
 
-        # Configura todas as linhas para expandirem verticalmente
         for i in range(12):
             self.app.rowconfigure(i, weight=1)
         
     def lost_password(self):
-        # Open a new window for forgotten user
         self.forgot_pwd_window = tk.Toplevel(self.app)
         self.forgot_pwd_window.title("Recuperar Senha")
 
-        # Create new fields for forgotten user window
         self.entry_forgot_name = self.create_entry_in_window("Confirme seu nome", 0, self.forgot_pwd_window)
         self.entry_forgot_last_name = self.create_entry_in_window("Confirme seu sobrenome", 1, self.forgot_pwd_window)
         self.entry_forgot_date = self.create_entry_in_window("Confirme sua data de nascimento", 2, self.forgot_pwd_window)
@@ -87,11 +81,9 @@ class LoginService:
         self.submit_button.grid(row=4, column=0, columnspan=3, sticky="ew", padx=5, pady=5)
                     
     def lost_user(self):        
-        # Open a new window for forgotten user
         self.forgot_user_window = tk.Toplevel(self.app)
         self.forgot_user_window.title("Recuperar Usuário")
 
-        # Create new fields for forgotten user window
         self.entry_forgot_name = self.create_entry_in_window("Nome", 0, self.forgot_user_window)
         self.entry_forgot_last_name = self.create_entry_in_window("Sobrenome", 1, self.forgot_user_window)
         
@@ -223,7 +215,6 @@ class LoginService:
             self.label_status.config(text="Não foi possível alterar a senha")
             self.forgot_pwd_window.destroy()
             con.close()
-        
         
 if __name__ == '__main__':
     service = LoginService()

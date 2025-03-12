@@ -15,15 +15,12 @@ class InterationUser:
         style = ttk.Style()
         style.configure("TButton", foreground="black", font=("Helvetica", 12))
 
-        # Configura as colunas para expandirem horizontalmente
         self.app.columnconfigure(0, weight=1)
         self.app.columnconfigure(1, weight=2)
         self.app.columnconfigure(2, weight=1)
 
-        # Criando os campos e armazenando em atributos da classe
         self.entry_login = self.create_entry("Olá Usuário! O que deseja fazer?", 0)
 
-        # Botões
         self.fgt_pswd = ttk.Button(self.app, text="Visualizar Resumo", command=self.view_resumed_info)
         self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
 
@@ -32,12 +29,10 @@ class InterationUser:
         
         self.back = ttk.Button(self.app, text="logout", command=self.deslogar)
         self.back.grid(row=15, column=1, sticky="ew", padx=5, pady=5)
-        
-        # Label de status
+
         self.label_status = tk.Label(self.app, text="")
         self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
 
-        # Configura todas as linhas para expandirem verticalmente
         for i in range(12):
             self.app.rowconfigure(i, weight=1)
             

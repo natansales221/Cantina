@@ -13,16 +13,13 @@ class LostPassword:
         self.app = tk.Tk()
         self.app.title("Alteração de senha")
         
-        
         style = ttk.Style()
         style.configure("TButton", foreground="black", font=("Helvetica", 12))
 
-        # Configura as colunas para expandirem horizontalmente
         self.app.columnconfigure(0, weight=1)
         self.app.columnconfigure(1, weight=2)
         self.app.columnconfigure(2, weight=1)
 
-        # Botões
         self.fgt_pswd = ttk.Button(self.app, text="Alterar Senha", command=self.submit_forgot_password)
         self.fgt_pswd.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
 
@@ -31,14 +28,27 @@ class LostPassword:
         self.entry_forgot_date = self.create_entry_in_window("Confirme sua data de nascimento", 4, self.app)
         self.entry_forgot_password = self.create_entry_in_window("Senha Nova", 5, self.app, is_password=True)
         
-        # Label de status
         self.label_status = tk.Label(self.app, text="")
         self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
 
-        # Configura todas as linhas para expandirem verticalmente
         for i in range(12):
             self.app.rowconfigure(i, weight=1)
-                            
+    
+    def formatar_data(self, *args):
+        """ Formata a entrada da data automaticamente (dd/mm/yyyy). """
+        texto = self.entry_forgot_date.get().replace("/", "")
+        if len(texto) > 8:
+            texto = texto[:8]
+
+        novo_texto = ""
+        for i, char in enumerate(texto):
+            if i in [2, 4]:
+                novo_texto += "/"
+            novo_texto += char
+
+        self.entry_forgot_date.delete(0, tk.END)
+        self.entry_forgot_date.insert(0, novo_texto)
+                 
     def create_entry_in_window(self, label, row, window, is_password=False):
         tk.Label(window, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
         entry = tk.Entry(window, show="*" if is_password else "")
@@ -78,9 +88,11 @@ class LostPassword:
         con.commit()
         
         # cursor.execute('drop table login_cantina')
-        print("Tabela criada com sucesso")
 
     def main(self):
+        self.entry_data_var = tk.StringVar()
+        self.entry_forgot_date.config(textvariable=self.entry_data_var)
+        self.entry_data_var.trace_add("write", self.formatar_data)
         self.app.mainloop()
         
     def submit_forgot_password(self):

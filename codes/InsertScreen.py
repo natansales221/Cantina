@@ -88,7 +88,7 @@ class InsertInfo():
         tk.Label(self.app, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
         entry = tk.Entry(self.app)
         entry.grid(row=row, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
-        entry.insert(0, default_value)  # Insere o valor padrão
+        entry.insert(0, default_value)
         return entry
 
     def formatar_data(self, *args):

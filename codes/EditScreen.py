@@ -21,12 +21,10 @@ class EditInfo():
         style = ttk.Style()
         style.configure("TButton", foreground="black", font=("Helvetica", 12))
 
-        # Configura as colunas para expandirem horizontalmente
         self.app.columnconfigure(0, weight=1)
         self.app.columnconfigure(1, weight=2)
         self.app.columnconfigure(2, weight=1)
 
-        # Criando os campos e armazenando em atributos da classe
         self.entry_data = self.create_entry("Data", 0)
         self.entry_nome = self.create_entry("Nome", 1)
         self.entry_produto = self.create_entry("Produto", 2)
@@ -35,8 +33,6 @@ class EditInfo():
         self.entry_cargo = self.create_entry("Cargo", 5)
         self.entry_turma = self.create_entry("Turma", 6)
 
-
-        # Botões
         self.botao_db = ttk.Button(self.app, text="Editar informações", command=self.salvar_geral)
         self.botao_db.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
         
@@ -49,12 +45,10 @@ class EditInfo():
         self.back = ttk.Button(self.app, text="Voltar", command=lambda: self.retornar(tipo))
         self.back.grid(row=15, column=0, sticky="ew", padx=5, pady=5)
         
-        # Label de status
         self.label_status = tk.Label(self.app, text="")
         self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
 
-        # Configura todas as linhas para expandirem verticalmente
-        for i in range(12):  # Garante que todas as linhas se ajustem
+        for i in range(12):
             self.app.rowconfigure(i, weight=1)
 
     def retornar(self, tipo):
@@ -70,7 +64,6 @@ class EditInfo():
             logout = InterationUser(tipo)
             logout.main() 
         
-            
     def deslogar(self):
         from LoginScreen import LoginService
         self.app.destroy()
@@ -85,22 +78,21 @@ class EditInfo():
         tk.Label(self.app, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
         entry = tk.Entry(self.app)
         entry.grid(row=row, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
-        entry.insert(0, default_value)  # Insere o valor padrão
+        entry.insert(0, default_value)
         return entry
 
     def formatar_data(self, *args):
         """ Formata a entrada da data automaticamente (dd/mm/yyyy). """
-        texto = self.entry_data.get().replace("/", "")  # Remove barras existentes
+        texto = self.entry_data.get().replace("/", "")
         if len(texto) > 8:
-            texto = texto[:8]  # Garante que não ultrapasse o formato correto
+            texto = texto[:8]
 
         novo_texto = ""
         for i, char in enumerate(texto):
-            if i in [2, 4]:  # Insere a barra nas posições corretas
+            if i in [2, 4]:
                 novo_texto += "/"
             novo_texto += char
 
-        # Atualiza o campo sem perder a posição do cursor
         self.entry_data.delete(0, tk.END)
         self.entry_data.insert(0, novo_texto)
         
@@ -203,7 +195,7 @@ class EditInfo():
 
     def atualizar(self, data, nome, produto, debito, credito, cargo, turma):
         try:
-            cursor, con = self.connect()  # Obtém o cursor e a conexão
+            cursor, con = self.connect()
             data = datetime.strptime(data, '%d/%m/%Y')
             nome = nome
             produto = produto
@@ -238,7 +230,6 @@ class EditInfo():
             raise
 
     def main(self):
-        # Adicionando o 'trace' para formatação de data
         self.entry_data_var = tk.StringVar()
         self.entry_data.config(textvariable=self.entry_data_var)
         self.entry_data_var.trace_add("write", self.formatar_data)
