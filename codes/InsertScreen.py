@@ -14,7 +14,7 @@ class InsertInfo():
             "database":"db\\database.db"
         }
     
-    def __init__(self, tipo):
+    def __init__(self,):
         self.app = tk.Tk()
         self.app.title("Inserção de informações")
         
@@ -50,7 +50,7 @@ class InsertInfo():
         self.fgt_user = ttk.Button(self.app, text="logout", command=self.deslogar)
         self.fgt_user.grid(row=15, column=2, sticky="ew", padx=5, pady=5)
         
-        self.back = ttk.Button(self.app, text="Voltar", command=lambda: self.retornar(tipo))
+        self.back = ttk.Button(self.app, text="Voltar", command=lambda: self.retornar(tipo='admin'))
         self.back.grid(row=15, column=0, sticky="ew", padx=5, pady=5)
 
         # Label de status
@@ -108,12 +108,14 @@ class InsertInfo():
         self.entry_data.insert(0, novo_texto)
 
     def salvar_xlsx(self):
+        debito = 0
+        credito = 0
         data = self.entry_data.get()
         nome = self.entry_nome.get()
-        credito = self.entry_credito.get()
+        credito = 0 if self.entry_credito.get() == '' else self.entry_credito.get()
         cargo = self.entry_cargo.get()
         produto = self.entry_produto.get()
-        debito = self.entry_debito.get()
+        debito = 0 if self.entry_debito.get()  == '' else self.entry_debito.get()
         turma = self.entry_turma.get()
         telefone = self.entry_telefone.get()
         observacao = self.entry_obs.get()
@@ -144,11 +146,13 @@ class InsertInfo():
         self.label_status.config(text="Dados salvos no Excel!")
 
     def salvar_db(self):
+        debito = 0
+        credito = 0
         data = self.entry_data.get()
         nome = self.entry_nome.get()
         produto = self.entry_produto.get()
-        debito = self.entry_debito.get()
-        credito = self.entry_credito.get()
+        debito = 0 if self.entry_debito.get()  == '' else self.entry_debito.get()
+        credito = 0 if self.entry_credito.get() == '' else self.entry_credito.get()
         cargo = self.entry_cargo.get()
         turma = self.entry_turma.get()
         telefone = self.entry_telefone.get()

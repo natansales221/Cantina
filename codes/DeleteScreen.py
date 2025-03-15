@@ -147,7 +147,7 @@ class DeleteInfo:
             """
             params = (data, nome, produto, cargo, turma)
             
-            if cursor.execute(query, params).rowcount == 1:
+            if cursor.execute(query, params).connection.in_transaction:
                 con.commit()
                 con.close()
                 return True

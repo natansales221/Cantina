@@ -108,7 +108,7 @@ class LoginService:
             """
         params = (lost_name, lost_sobrenome)
         
-        if cursor.execute(query, params).rowcount != 0:
+        if cursor.execute(query, params).connection.in_transaction:
             con.commit()
             login_novo = cursor.fetchall()[0][0]
 
@@ -203,7 +203,7 @@ class LoginService:
             """
             params = (pwd, lost_name, lost_sobrenome, date)
             
-            if cursor.execute(query, params).rowcount == 1:
+            if cursor.execute(query, params).connection.in_transaction:
                 con.commit()
                 self.label_status.config(text="Senha alterada!")
                 self.forgot_pwd_window.destroy()

@@ -111,7 +111,7 @@ class LostPassword:
         """
         params = (pwd, lost_name, lost_sobrenome, date)
         
-        if cursor.execute(query, params).rowcount == 1:
+        if cursor.execute(query, params).connection.in_transaction:
             con.commit()
             self.label_status.config(text="Senha alterada!")
 
