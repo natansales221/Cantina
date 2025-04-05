@@ -45,6 +45,7 @@ class InterationUser:
         con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()
         return cursor, con
+    
     def criar(self):
         con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()

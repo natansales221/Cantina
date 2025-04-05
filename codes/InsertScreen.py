@@ -14,7 +14,7 @@ class InsertInfo():
             "database":"db\\database.db"
         }
     
-    def __init__(self,):
+    def __init__(self, tipo):
         self.app = tk.Tk()
         self.app.title("Inserção de informações")
         
