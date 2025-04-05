@@ -10,8 +10,8 @@ class InsertInfo():
     @property
     def caminhos(self):
         return {
-            "excel":"db\\controle_estoque.xlsx",
-            "database":"db\\database.db"
+            "excel":"Cantina\\db\\controle_estoque.xlsx",
+            "database":"Cantina\\db\\database.db"
         }
     
     def __init__(self, tipo):

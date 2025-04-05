@@ -19,10 +19,7 @@ class LoginService:
         self.app = ctk.CTk()
         self.app.title("Cantina")
         self.app.geometry("700x400")
-        self.app.iconbitmap(r"backup\teste\logo.ico")
         
-        self.image = Image.open(r"backup\teste\45605.png")
-        self.image_resized = self.image.resize((350, 350))
         self.img_tk = ImageTk.PhotoImage(self.image_resized)
         
         label_img = ctk.CTkLabel(master=self.app, image=self.img_tk, text="")
