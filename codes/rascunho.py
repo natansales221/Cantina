@@ -115,7 +115,7 @@ def carregar_cat_1():
     categoria_um = combo_categoria.get()  # Pega a categoria escolhida (ex: nome, valor, tipo)
     filtro = entry_filtro.get()
 
-    conn = sqlite3.connect(r"Cantina\db\database.db")
+    conn = sqlite3.connect(r"db\database.db")
     cursor = conn.cursor()
 
     nome_tabela = 'cantina'
