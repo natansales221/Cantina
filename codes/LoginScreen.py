@@ -74,7 +74,7 @@ class LoginService:
         self.forgot_user_window.destroy()
         
     def connect(self):
-        conn = sqlite3.connect(r'db\database.db')
+        conn = sqlite3.connect(r'Cantina\db\database.db')
         cursor = conn.cursor()        
         return cursor, conn
             
@@ -108,7 +108,7 @@ class LoginService:
             self.label_status.configure(text="Login ou senha inválido!")
             
     def criar(self):
-        con = sqlite3.connect(r'db\database.db')
+        con = sqlite3.connect(r'Cantina\db\database.db')
         cursor = con.cursor()
 
         cursor.execute('''

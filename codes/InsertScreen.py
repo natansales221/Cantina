@@ -9,8 +9,8 @@ class InsertInfo():
     @property
     def caminhos(self):
         return {
-            "excel": "db\\controle_estoque.xlsx",
-            "database": "db\\database.db"
+            "excel": "Cantina\\db\\controle_estoque.xlsx",
+            "database": "Catina\\db\\database.db"
         }
     
     def __init__(self, tipo):
@@ -50,7 +50,7 @@ class InsertInfo():
         self.fgt_user = ctk.CTkButton(self.app, text="logout", command=self.deslogar)
         self.fgt_user.grid(row=15, column=2, sticky="ew", padx=5, pady=5)
 
-        self.back = ctk.CTkButton(self.app, text="Voltar", command=lambda: self.retornar(tipo='admin'))
+        self.back = ctk.CTkButton(self.app, text="Voltar", command= lambda: self.retornar(tipo))
         self.back.grid(row=15, column=0, sticky="ew", padx=5, pady=5)
 
         # Status
@@ -61,15 +61,18 @@ class InsertInfo():
             self.app.grid_rowconfigure(i, weight=1)
 
     def retornar(self, tipo):
-        if tipo.upper() == 'ADMIN':
-            from InterationAdmin import InterationAdmin
-            self.app.destroy()
-            InterationAdmin(tipo).main()
+        tipo_str = tipo() if callable(tipo) else tipo  # Garante que 'tipo' seja tratado como string
 
-        elif tipo.upper() == 'USER':
+        if tipo_str == 'admin':
+            from InterationAdmin import InterationAdmin
+            self.app.destroy()  # Fecha a janela atual
+            InterationAdmin(tipo_str).main()  # Chama a função principal para 'admin'
+
+        elif tipo_str == 'user':
             from InterationUser import InterationUser
-            self.app.destroy()
-            InterationUser(tipo).main()
+            self.app.destroy()  # Fecha a janela atual
+            InterationUser(tipo_str).main()  # Chama a função principal para 'user'
+
 
     def deslogar(self):
         from LoginScreen import LoginService

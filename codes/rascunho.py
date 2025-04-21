@@ -106,77 +106,165 @@ from PIL import Image, ImageTk
 # print("Dados exportados para 'resultado.xlsx'")
 
 
-import sqlite3
-import pandas as pd
-import customtkinter as ctk
+# import sqlite3
+# import pandas as pd
+# import customtkinter as ctk
 
-# Função para carregar produtos filtrados
-def carregar_cat_1():
-    categoria_um = combo_categoria.get()  # Pega a categoria escolhida (ex: nome, valor, tipo)
-    filtro = entry_filtro.get()
+# # Função para carregar produtos filtrados
+# def carregar_cat_1():
+#     categoria_um = combo_categoria.get()  # Pega a categoria escolhida (ex: nome, valor, tipo)
+#     filtro = entry_filtro.get()
 
-    conn = sqlite3.connect(r"db\database.db")
-    cursor = conn.cursor()
+#     conn = sqlite3.connect(r"Cantina\db\database.db")
+#     cursor = conn.cursor()
 
-    nome_tabela = 'cantina'
-    cursor.execute(f"PRAGMA table_info({nome_tabela})")
-    colunas = [coluna[1] for coluna in cursor.fetchall()]
+#     nome_tabela = 'cantina'
+#     cursor.execute(f"PRAGMA table_info({nome_tabela})")
+#     colunas = [coluna[1] for coluna in cursor.fetchall()]
 
-    df_base = pd.DataFrame(columns=colunas)
+#     df_base = pd.DataFrame(columns=colunas)
 
-    if categoria_um in colunas:
-        listbox.delete("0.0", "end")
+#     if categoria_um in colunas:
+#         listbox.delete("0.0", "end")
 
-        cursor.execute(f"SELECT * FROM cantina WHERE {categoria_um} LIKE ?", (f"%{filtro}%",))
-        produtos = cursor.fetchall()
+#         cursor.execute(f"SELECT * FROM cantina WHERE {categoria_um} LIKE ?", (f"%{filtro}%",))
+#         produtos = cursor.fetchall()
 
-        if produtos:
-            df_base = pd.DataFrame(produtos, columns=colunas)
-            listbox.insert("end", df_base.to_string(index=False))
-        else:
-            listbox.insert("end", "Nenhum resultado encontrado.")
+#         if produtos:
+#             df_base = pd.DataFrame(produtos, columns=colunas)
+#             listbox.insert("end", df_base.to_string(index=False))
+#         else:
+#             listbox.insert("end", "Nenhum resultado encontrado.")
     
-    conn.close()
+#     conn.close()
 
-# Interface
-ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("blue")
+# # Interface
+# ctk.set_appearance_mode("dark")
+# ctk.set_default_color_theme("blue")
 
-root = ctk.CTk()
-root.geometry("600x500")
-root.title("Filtro de Produtos")
+# root = ctk.CTk()
+# root.geometry("600x500")
+# root.title("Filtro de Produtos")
 
-# Pega categorias do banco
-conn = sqlite3.connect(r"Cantina\db\database.db")
-cursor = conn.cursor()
-cursor.execute("PRAGMA table_info(cantina)")
-categorias = [coluna[1] for coluna in cursor.fetchall()]
-conn.close()
+# # Pega categorias do banco
+# conn = sqlite3.connect(r"Cantina\db\database.db")
+# cursor = conn.cursor()
+# cursor.execute("PRAGMA table_info(cantina)")
+# categorias = [coluna[1] for coluna in cursor.fetchall()]
+# conn.close()
 
-# Label
-label = ctk.CTkLabel(root, text="Filtrar por Categoria:", font=("Arial", 14))
-label.pack(pady=10)
+# # Label
+# label = ctk.CTkLabel(root, text="Filtrar por Categoria:", font=("Arial", 14))
+# label.pack(pady=10)
 
-# Frame dos filtros
-frame_filtros = ctk.CTkFrame(root)
-frame_filtros.pack(pady=10)
+# # Frame dos filtros
+# frame_filtros = ctk.CTkFrame(root)
+# frame_filtros.pack(pady=10)
 
-# ComboBox
-combo_categoria = ctk.CTkComboBox(frame_filtros, values=categorias)
-combo_categoria.pack(side="left", padx=10)
-combo_categoria.set("nome")
+# # ComboBox
+# combo_categoria = ctk.CTkComboBox(frame_filtros, values=categorias)
+# combo_categoria.pack(side="left", padx=10)
+# combo_categoria.set("nome")
 
-# Campo de filtro
-entry_filtro = ctk.CTkEntry(frame_filtros, placeholder_text="Digite o valor a buscar...")
-entry_filtro.pack(side="left", padx=10)
+# # Campo de filtro
+# entry_filtro = ctk.CTkEntry(frame_filtros, placeholder_text="Digite o valor a buscar...")
+# entry_filtro.pack(side="left", padx=10)
 
-# Botão de filtro
-btn_filtrar = ctk.CTkButton(root, text="Filtrar", command=carregar_cat_1)
-btn_filtrar.pack(padx=10, pady=10)
+# # Botão de filtro
+# btn_filtrar = ctk.CTkButton(root, text="Filtrar", command=carregar_cat_1)
+# btn_filtrar.pack(padx=10, pady=10)
 
-# Área de exibição
-listbox = ctk.CTkTextbox(root, wrap="none", font=("Courier", 12))
-listbox.pack(expand=True, fill="both", padx=10, pady=10)
+# # Área de exibição
+# listbox = ctk.CTkTextbox(root, wrap="none", font=("Courier", 12))
+# listbox.pack(expand=True, fill="both", padx=10, pady=10)
 
-# Main loop
-root.mainloop()
+# # Main loop
+# root.mainloop()
+
+import customtkinter as ctk
+import sqlite3
+from InsertScreen import InsertInfo
+from FilterView import Filter
+
+
+def __init__(self, tipo):
+    ctk.set_appearance_mode("dark")  # Define o tema escuro
+    ctk.set_default_color_theme("blue")
+
+    self.app = ctk.CTk()
+    self.app.title("Seleção de opções")
+    self.app.geometry("400x300")
+
+    self.label_title = ctk.CTkLabel(self.app, text="Olá Usuário! O que deseja fazer?", font=("Helvetica", 14))
+    self.label_title.pack(pady=10)
+
+    self.view_filtro_button = ctk.CTkButton(self.app, text="Visualizar Dados", command=self.view_filtro)
+    self.view_filtro_button.pack(pady=5)
+    
+    self.insert_button = ctk.CTkButton(self.app, text="Inserir informações", command=lambda: self.insert(tipo))
+    self.insert_button.pack(pady=5)
+    
+    self.logout_button = ctk.CTkButton(self.app, text="Logout", command=self.deslogar)
+    self.logout_button.pack(pady=5)
+    
+    self.label_status = ctk.CTkLabel(self.app, text="", fg_color="transparent")
+    self.label_status.pack(pady=5)
+
+def deslogar(self):
+    from LoginScreen import LoginService
+    self.app.destroy()
+    logout = LoginService()
+    logout.main()
+
+def view_filtro(self):
+    self.app.destroy()
+    filtro_info = Filter(self.tipo)
+    filtro_info.main()
+
+def insert(self, tipo):
+    self.app.destroy()
+    insert_info = InsertInfo(tipo)
+    insert_info.main()
+
+def connect(self):
+    con = sqlite3.connect(r'Cantina\db\database.db')
+    cursor = con.cursor()
+    return cursor, con
+
+def criar(self):
+    con = sqlite3.connect(r'Cantina\db\database.db')
+    cursor = con.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS lo   gin_cantina (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            sobrenome TEXT,
+            login TEXT,
+            senha TEXT,
+            tipo TEXT,
+            nascimento TEXT
+        );
+    ''')
+
+    query = """
+            INSERT INTO login_cantina (nome, sobrenome, login, senha, tipo, nascimento)
+            VALUES (?,?,?,?,?,?)
+        """
+
+    params = ('natan', 'sales', 'natansales', 'natansales2', 'admin', '30/09/2000')
+    
+    cursor.execute(query, params)
+    
+    con.commit()
+    con.close()
+    
+    # cursor.execute('drop table login_cantina')
+    print("Tabela criada com sucesso")
+
+def main(self):
+    self.app.mainloop()
+            
+if __name__ == '__main__':
+    service = InterationUser()
+    service.main()

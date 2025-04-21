@@ -6,10 +6,13 @@ import sqlite3
 from InsertScreen import InsertInfo
 from EditScreen import EditInfo
 from DeleteScreen import DeleteInfo
+from FilterView import Filter
 
 class InterationAdmin:
     
     def __init__(self, tipo):
+        self.tipo = tipo
+
         ctk.set_appearance_mode("System")
         ctk.set_default_color_theme("blue")
         
@@ -20,22 +23,16 @@ class InterationAdmin:
         self.entry_login = ctk.CTkLabel(self.app, text="Olá Admin! O que deseja fazer?", font=("Helvetica", 16))
         self.entry_login.pack(pady=10)
         
-        self.insert_button = ctk.CTkButton(self.app, text="Inserir informações", command=lambda: self.insert(tipo))
+        self.insert_button = ctk.CTkButton(self.app, text="Inserir informações", command=self.insert)
         self.insert_button.pack(pady=5)
         
-        self.view_resumo_button = ctk.CTkButton(self.app, text="Visualizar Dados Resumidos", command=self.view_resumo)
-        self.view_resumo_button.pack(pady=5)
-        
-        self.edit_button = ctk.CTkButton(self.app, text="Editar Informações", command=lambda: self.edit_info(tipo))
+        self.edit_button = ctk.CTkButton(self.app, text="Editar Informações", command=self.edit_info)
         self.edit_button.pack(pady=5)
-        
-        self.view_completo_button = ctk.CTkButton(self.app, text="Visualizar Dados Completos", command=self.view_completo)
-        self.view_completo_button.pack(pady=5)
-        
-        self.delete_button = ctk.CTkButton(self.app, text="Excluir Informações", command=lambda: self.excluir_info(tipo))
+           
+        self.delete_button = ctk.CTkButton(self.app, text="Excluir Informações", command=self.excluir_info)
         self.delete_button.pack(pady=5)
         
-        self.view_filtro_button = ctk.CTkButton(self.app, text="Visualizar Dados Filtrados", command=self.view_filtro)
+        self.view_filtro_button = ctk.CTkButton(self.app, text="Visualizar Dados", command=self.view_filtro)
         self.view_filtro_button.pack(pady=5)
         
         self.logout_button = ctk.CTkButton(self.app, text="Logout", command=self.deslogar)
@@ -50,20 +47,20 @@ class InterationAdmin:
         logout = LoginService()
         logout.main()
         
-    def insert(self, tipo):
+    def insert(self):
         self.app.destroy()
-        insert_info = InsertInfo(tipo)
+        insert_info = InsertInfo(self.tipo)
         insert_info.main()
 
-    def edit_info(self, tipo):
+    def edit_info(self):
         self.app.destroy()
-        edit_info = EditInfo(tipo)
+        edit_info = EditInfo(self.tipo)
         edit_info.main()
         
-    def excluir_info(self, tipo):
+    def excluir_info(self):
         self.app.destroy()
-        edit_info = DeleteInfo(tipo)
-        edit_info.main()
+        delete_info = DeleteInfo(self.tipo)
+        delete_info.main()
         
     def view_resumo(self):
         print("view resumo")
@@ -72,11 +69,15 @@ class InterationAdmin:
         print("view completo")
         
     def view_filtro(self):
-        print("view filtro")
+        self.app.destroy()
+        filtro_info = Filter(self.tipo)
+        filtro_info.main()
         
     def main(self):
         self.app.mainloop()
         
+
 if __name__ == '__main__':
-    service = InterationAdmin()
+    tipo = "cantina"  # ou outro nome da tabela que você deseja usar
+    service = InterationAdmin(tipo)
     service.main()
