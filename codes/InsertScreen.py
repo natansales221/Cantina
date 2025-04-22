@@ -205,5 +205,5 @@ class InsertInfo():
 
 
 if __name__ == '__main__':
-    service = InsertInfo(tipo='admin')
+    service = InsertInfo()
     service.main()

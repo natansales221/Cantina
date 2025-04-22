@@ -78,6 +78,5 @@ class InterationAdmin:
         
 
 if __name__ == '__main__':
-    tipo = "cantina"  # ou outro nome da tabela que você deseja usar
-    service = InterationAdmin(tipo)
+    service = InterationAdmin()
     service.main()

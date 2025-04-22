@@ -177,5 +177,5 @@ class DeleteInfo:
         self.app.mainloop()
 
 if __name__ == '__main__':
-    service = DeleteInfo("ADMIN")
+    service = DeleteInfo()
     service.main()

@@ -85,5 +85,5 @@ class InterationUser:
 
 # Execução
 if __name__ == '__main__':
-    service = InterationUser("cantina")  # fornecendo o tipo (nome da tabela)
+    service = InterationUser()
     service.main()

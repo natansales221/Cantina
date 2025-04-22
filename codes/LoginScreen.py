@@ -40,41 +40,14 @@ class LoginService:
         lost_password = LostPassword()
         lost_password.main()
     
-    def lost_user(self):        
-        self.forgot_user_window = ctk.CTkToplevel(self.app)
-        self.forgot_user_window.title("Recuperar Usuário")
-
-        self.entry_forgot_name = self.create_entry_in_window("Nome", 0, self.forgot_user_window)
-        self.entry_forgot_last_name = self.create_entry_in_window("Sobrenome", 1, self.forgot_user_window)
-        
-        self.submit_button = ctk.CTkButton(self.forgot_user_window, text="Enviar", command=self.submit_forgot_user)
-        self.submit_button.grid(row=2, column=0, columnspan=3, padx=5, pady=5)
-    
-    def create_entry_in_window(self, label, row, window, is_password=False):
-        ctk.CTkLabel(window, text=label + ":").grid(row=row, column=0, padx=5, pady=5)
-        entry = ctk.CTkEntry(window, show="*" if is_password else "")
-        entry.grid(row=row, column=1, columnspan=2, padx=5, pady=5)
-        return entry
-    
-    def submit_forgot_user(self):
-        cursor, con = self.connect()
-        lost_name = self.entry_forgot_name.get()
-        lost_sobrenome = self.entry_forgot_last_name.get()
-        
-        query = "SELECT login FROM login_cantina WHERE nome = ? AND sobrenome = ?"
-        params = (lost_name, lost_sobrenome)
-        
-        cursor.execute(query, params)
-        result = cursor.fetchone()
-        
-        if result:
-            self.label_status.configure(text=f"Seu usuário é {result[0]}")
-        else:
-            self.label_status.configure(text="Usuário não encontrado")
-        self.forgot_user_window.destroy()
+    def lost_user(self):    
+        from LostUser import LostUser 
+        self.app.destroy()
+        lost_password = LostUser()
+        lost_password.main()
         
     def connect(self):
-        conn = sqlite3.connect(r'Cantina\db\database.db')
+        conn = sqlite3.connect(r'db\database.db')
         cursor = conn.cursor()        
         return cursor, conn
             

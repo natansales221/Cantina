@@ -210,6 +210,5 @@ class EditInfo:
 
 
 if __name__ == '__main__':
-    tipo = "ADMIN"  # ou "USER", conforme necessário
-    service = EditInfo(tipo)
+    service = EditInfo()
     service.main()

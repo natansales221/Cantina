@@ -32,7 +32,7 @@ class Filter(ctk.CTk):
         self.entry_filtro = ctk.CTkEntry(frame_filtros, placeholder_text="Digite o valor a buscar...")
         self.entry_filtro.pack(side="left", padx=10)
 
-        btn_filtrar = ctk.CTkButton(self, text="Filtrar", command=self.carregar_cat_1)
+        btn_filtrar = ctk.CTkButton(self, text="Filtrar", command=self.carregar_produtos)
         btn_filtrar.pack(padx=10, pady=10)
 
         btn_voltar = ctk.CTkButton(self, text="Voltar", command=self.voltar)
@@ -53,35 +53,45 @@ class Filter(ctk.CTk):
             InterationUser(tipo=self.tipo).main()  # Chama a função principal para 'user'
 
     def obter_categorias(self):
-        conn = sqlite3.connect(r"Cantina\db\database.db")
+        conn = sqlite3.connect(r"db\database.db")
         cursor = conn.cursor()
         cursor.execute(f"PRAGMA table_info({self.nome_tabela})")
         categorias = [coluna[1] for coluna in cursor.fetchall()]
         conn.close()
         return categorias
 
-    def carregar_cat_1(self):
-        categoria_um = self.combo_categoria.get()
+    def carregar_produtos(self):
         filtro = self.entry_filtro.get()
-
-        conn = sqlite3.connect(r"Cantina\db\database.db")
+        categoria = self.combo_categoria.get()  # Pegando valor do ComboBox
+        conn = sqlite3.connect(r'db\database.db')
         cursor = conn.cursor()
-        cursor.execute(f"PRAGMA table_info({self.nome_tabela})")
+        cursor.execute(f'SELECT * FROM cantina LIMIT 1')
+
+        # Extrai os nomes das colunas do cursor.description
+        nomes_colunas = [descricao[0] for descricao in cursor.description]
+
+        # Se a categoria for "Todos", busca tudo, senão filtra pela categoria escolhida
+        if categoria == "Todos":
+            cursor.execute("SELECT * FROM cantina")
+        else:
+            cursor.execute(f"SELECT * FROM cantina WHERE {categoria} like ?", (f"%{filtro}%",))
+            
+            #cursor.execute("SELECT * FROM cantina WHERE categoria LIKE ?", (f"%{categoria}%",))
+
+        # produtos = cursor.fetchall()
         colunas = [coluna[1] for coluna in cursor.fetchall()]
+    
         df_base = pd.DataFrame(columns=colunas)
-
-        if categoria_um in colunas:
-            self.listbox.delete("0.0", "end")
-            cursor.execute(f"SELECT * FROM {self.nome_tabela} WHERE {categoria_um} LIKE ?", (f"%{filtro}%",))
-            produtos = cursor.fetchall()
-
-            if produtos:
-                df_base = pd.DataFrame(produtos, columns=colunas)
-                self.listbox.insert("end", df_base.to_string(index=False))
-            else:
-                self.listbox.insert("end", "Nenhum resultado encontrado.")
-
         conn.close()
+
+        # Limpar a lista antes de adicionar os novos itens
+        self.listbox.delete("0.0", "end")
+
+        # Adicionar os produtos na listbox
+        # if produtos:
+        #     df_base = pd.DataFrame(produtos, columns=colunas)
+        
+        self.listbox.insert("end", df_base.to_string(index=False))
 
     def main(self):
         self.mainloop()
@@ -89,5 +99,5 @@ class Filter(ctk.CTk):
 
 # Execução direta
 if __name__ == "__main__":
-    app = Filter("cantina")  # nome da tabela passado como argumento
+    app = Filter(tipo =   'admin')
     app.main()
