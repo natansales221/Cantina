@@ -55,10 +55,10 @@ class Filter(ctk.CTk):
     def obter_categorias(self):
         conn = sqlite3.connect(r"db\database.db")
         cursor = conn.cursor()
-        cursor.execute(f"PRAGMA table_info({self.nome_tabela})")
-        categorias = [coluna[1] for coluna in cursor.fetchall()]
+        cursor.execute(f"SELECT * FROM cantina LIMIT 1")
+        nomes_colunas = [desc[0] for desc in cursor.description]
         conn.close()
-        return categorias
+        return nomes_colunas
 
     def carregar_produtos(self):
         filtro = self.entry_filtro.get()
@@ -75,29 +75,33 @@ class Filter(ctk.CTk):
             cursor.execute("SELECT * FROM cantina")
         else:
             cursor.execute(f"SELECT * FROM cantina WHERE {categoria} like ?", (f"%{filtro}%",))
-            
-            #cursor.execute("SELECT * FROM cantina WHERE categoria LIKE ?", (f"%{categoria}%",))
 
-        # produtos = cursor.fetchall()
-        colunas = [coluna[1] for coluna in cursor.fetchall()]
-    
-        df_base = pd.DataFrame(columns=colunas)
+        produtos = cursor.fetchall()
+
+        df_base = pd.DataFrame(produtos, columns=nomes_colunas)
+        df_base = df_base.drop(columns=["id"])
+
+        # Formata data
+        if 'data' in df_base.columns:
+            df_base['data'] = pd.to_datetime(df_base['data'], errors='coerce').dt.strftime('%d-%m-%Y')
+
+        # Formata valores com cifrão
+        colunas_monetarias = ['debito', 'credito', 'total']
+        for coluna in colunas_monetarias:
+            if coluna in df_base.columns:
+                df_base[coluna] = pd.to_numeric(df_base[coluna], errors='coerce')
+                df_base[coluna] = df_base[coluna].apply(lambda x: f"R$ {x:.2f}" if pd.notnull(x) else "")
+
         conn.close()
 
-        # Limpar a lista antes de adicionar os novos itens
         self.listbox.delete("0.0", "end")
-
-        # Adicionar os produtos na listbox
-        # if produtos:
-        #     df_base = pd.DataFrame(produtos, columns=colunas)
-        
         self.listbox.insert("end", df_base.to_string(index=False))
-
+        
     def main(self):
         self.mainloop()
 
 
 # Execução direta
 if __name__ == "__main__":
-    app = Filter(tipo =   'admin')
+    app = Filter()
     app.main()
