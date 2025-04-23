@@ -83,11 +83,10 @@ if __name__ == '__main__':
 
 
     def carregar_produtos():
-        categoria = combo_categoria.get()  # Pegando valor do ComboBox
+        categoria = combo_categoria.get()
         conn = sqlite3.connect("mercado.db")
         cursor = conn.cursor()
 
-        # Se a categoria for "Todos", busca tudo, senão filtra pela categoria escolhida
         if categoria == "Todos":
             cursor.execute("SELECT nome, preco FROM produtos")
         else:
@@ -96,10 +95,8 @@ if __name__ == '__main__':
         produtos = cursor.fetchall()
         conn.close()
 
-        # Limpar a lista antes de adicionar os novos itens
         listbox.delete("0.0", "end")
 
-        # Adicionar os produtos na listbox
         for produto in produtos:
             listbox.insert("end", f"{produto[0]} - R$ {produto[1]:.2f}\n")
 
@@ -117,13 +114,12 @@ if __name__ == '__main__':
 
     combo_categoria = ctk.CTkComboBox(root, values=["Todos", "Alimentos", "Limpeza", "Bebidas"], command=lambda event: carregar_produtos())
     combo_categoria.pack()
-    combo_categoria.set("Todos")  # Define a opção inicial como "Todos"
+    combo_categoria.set("Todos")
 
     btn_carregar = ctk.CTkButton(root, text="Filtrar", command=carregar_produtos)
     btn_carregar.pack(pady=10)
 
     listbox = ctk.CTkTextbox(root, width=350, height=200)
     listbox.pack(pady=10)
-
 
     root.mainloop()

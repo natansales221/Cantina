@@ -14,19 +14,17 @@ class InsertInfo():
         }
     
     def __init__(self, tipo):
-        ctk.set_appearance_mode("dark")  # ou "dark"
-        ctk.set_default_color_theme("blue")  # tema opcional
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("blue")
         
         self.app = ctk.CTk()
         self.app.title("Inserção de informações")
         self.app.geometry("800x600")
 
-        # Layout grid
         self.app.grid_columnconfigure(0, weight=1)
         self.app.grid_columnconfigure(1, weight=2)
         self.app.grid_columnconfigure(2, weight=1)
 
-        # Campos de entrada
         self.entry_data = self.create_entry("Data", 0)
         self.entry_nome = self.create_entry("Nome", 1)
         self.entry_produto = self.create_entry("Produto", 2)
@@ -37,7 +35,6 @@ class InsertInfo():
         self.entry_telefone = self.create_entry("Telefone", 7)
         self.entry_obs = self.create_entry("Observação", 8)
 
-        # Botões
         self.botao_db = ctk.CTkButton(self.app, text="Salvar Database", command=self.salvar_geral)
         self.botao_db.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
 
@@ -53,7 +50,6 @@ class InsertInfo():
         self.back = ctk.CTkButton(self.app, text="Voltar", command= lambda: self.retornar(tipo))
         self.back.grid(row=15, column=0, sticky="ew", padx=5, pady=5)
 
-        # Status
         self.label_status = ctk.CTkLabel(self.app, text="")
         self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
 
@@ -61,17 +57,17 @@ class InsertInfo():
             self.app.grid_rowconfigure(i, weight=1)
 
     def retornar(self, tipo):
-        tipo_str = tipo() if callable(tipo) else tipo  # Garante que 'tipo' seja tratado como string
+        tipo_str = tipo() if callable(tipo) else tipo
 
         if tipo_str == 'admin':
             from InterationAdmin import InterationAdmin
-            self.app.destroy()  # Fecha a janela atual
-            InterationAdmin(tipo_str).main()  # Chama a função principal para 'admin'
+            self.app.destroy()
+            InterationAdmin(tipo_str).main()
 
         elif tipo_str == 'user':
             from InterationUser import InterationUser
-            self.app.destroy()  # Fecha a janela atual
-            InterationUser(tipo_str).main()  # Chama a função principal para 'user'
+            self.app.destroy()
+            InterationUser(tipo_str).main() 
 
 
     def deslogar(self):
@@ -199,7 +195,6 @@ class InsertInfo():
             raise Exception(f"Erro ao inserir no banco: {e}")
 
     def main(self):
-        # Formatar campo de data com trace (manual pois customtkinter não tem StringVar igual)
         self.entry_data.bind("<KeyRelease>", lambda e: self.formatar_data())
         self.app.mainloop()
 

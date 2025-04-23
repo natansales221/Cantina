@@ -7,7 +7,7 @@ class LostUser:
     
     def __init__(self):
         
-        ctk.set_appearance_mode("dark")  # Define o tema escuro
+        ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
         
         self.app = ctk.CTk()
@@ -76,8 +76,6 @@ class LostUser:
         cursor.execute(query, params)
         
         con.commit()
-        
-        # cursor.execute('drop table login_cantina')
 
     def main(self):
         self.app.mainloop()
@@ -97,8 +95,7 @@ class LostUser:
             self.label_status.configure(text=f"Seu usuário é {result[0]}")
         else:
             self.label_status.configure(text="Usuário não encontrado")
-
-       
+     
 if __name__ == '__main__':
     service = LostUser()
     service.main()

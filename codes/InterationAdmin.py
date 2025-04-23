@@ -76,7 +76,6 @@ class InterationAdmin:
     def main(self):
         self.app.mainloop()
         
-
 if __name__ == '__main__':
     service = InterationAdmin()
     service.main()

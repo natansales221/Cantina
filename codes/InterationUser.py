@@ -5,7 +5,7 @@ from InsertScreen import InsertInfo
 class InterationUser: 
     
     def __init__(self, tipo):
-        self.tipo = tipo  # salvando tipo no objeto
+        self.tipo = tipo
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
@@ -35,7 +35,7 @@ class InterationUser:
         logout.main()
     
     def view_resumed_info(self):
-        from FilterView import Filter  # import dentro da função evita loop de importação
+        from FilterView import Filter
         self.app.destroy()
         filtro_info = Filter(self.tipo)
         filtro_info.main()
@@ -83,7 +83,6 @@ class InterationUser:
     def main(self):
         self.app.mainloop()
 
-# Execução
 if __name__ == '__main__':
     service = InterationUser()
     service.main()

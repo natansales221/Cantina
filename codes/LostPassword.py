@@ -7,7 +7,7 @@ class LostPassword:
     
     def __init__(self):
         
-        ctk.set_appearance_mode("dark")  # Define o tema escuro
+        ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
         
         self.app = ctk.CTk()
@@ -93,8 +93,6 @@ class LostPassword:
         
         con.commit()
         
-        # cursor.execute('drop table login_cantina')
-
     def main(self):
         self.app.mainloop()
         
