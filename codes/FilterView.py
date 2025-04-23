@@ -77,25 +77,64 @@ class Filter(ctk.CTk):
             cursor.execute(f"SELECT * FROM cantina WHERE {categoria} like ?", (f"%{filtro}%",))
 
         produtos = cursor.fetchall()
-
         df_base = pd.DataFrame(produtos, columns=nomes_colunas)
-        df_base = df_base.drop(columns=["id"])
 
-        # Formata data
+        # Remove a coluna ID se existir
+        if 'id' in df_base.columns:
+            df_base = df_base.drop(columns=["id"])
+
+        # Formata a coluna de data
         if 'data' in df_base.columns:
             df_base['data'] = pd.to_datetime(df_base['data'], errors='coerce').dt.strftime('%d-%m-%Y')
 
-        # Formata valores com cifrão
+        # Colunas monetárias
         colunas_monetarias = ['debito', 'credito', 'total']
+        
+        # Converte colunas monetárias para número antes da soma
         for coluna in colunas_monetarias:
             if coluna in df_base.columns:
                 df_base[coluna] = pd.to_numeric(df_base[coluna], errors='coerce')
-                df_base[coluna] = df_base[coluna].apply(lambda x: f"R$ {x:.2f}" if pd.notnull(x) else "")
+        linha_vazia = {
+            'data': '-',
+            'nome': '-',
+            'produto': '-',
+            'debito': '-',
+            'credito': '-',
+            'total': '-',
+            'cargo': '-',
+            'turma': '-',
+            'telefone': '-',
+            'observacao': '-'
+        }
+        # Cria uma linha de totais
+        linha_total = {
+            'data': '',
+            'nome': '',
+            'produto': 'TOTAL',
+            'debito': df_base['debito'].sum(),
+            'credito': df_base['credito'].sum(),
+            'total': df_base['total'].sum(),
+            'cargo': '',
+            'turma': '',
+            'telefone': '',
+            'observacao': ''
+        }
+
+        # Cria DataFrame de soma com a linha total
+        df_soma = pd.DataFrame([linha_vazia, linha_total])
+
+        # Formata os campos monetários com R$
+        for coluna in colunas_monetarias:
+            df_base[coluna] = df_base[coluna].apply(lambda x: f"R$ {float(x):.2f}" if pd.notnull(x) and isinstance(x, (int, float)) else x)
+            df_soma[coluna] = df_soma[coluna].apply(lambda x: f"R$ {float(x):.2f}" if pd.notnull(x) and isinstance(x, (int, float)) else x)
+
 
         conn.close()
+        df_final = pd.concat([df_base, df_soma], ignore_index=True)
 
+        # Mostra tudo junto na interface
         self.listbox.delete("0.0", "end")
-        self.listbox.insert("end", df_base.to_string(index=False))
+        self.listbox.insert("end", df_final.to_string(index=False))
         
     def main(self):
         self.mainloop()
@@ -103,5 +142,5 @@ class Filter(ctk.CTk):
 
 # Execução direta
 if __name__ == "__main__":
-    app = Filter()
+    app = Filter(tipo='admin')
     app.main()
