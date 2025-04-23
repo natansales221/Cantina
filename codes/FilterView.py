@@ -142,5 +142,5 @@ class Filter(ctk.CTk):
 
 # Execução direta
 if __name__ == "__main__":
-    app = Filter(tipo='admin')
+    app = Filter()
     app.main()
