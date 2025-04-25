@@ -10,7 +10,7 @@ class Filter(ctk.CTk):
 
         self.tipo = tipo
         self.title("Filtro de Produtos")
-        self.geometry("600x500")
+        self.geometry("800x700")
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
@@ -103,7 +103,7 @@ class Filter(ctk.CTk):
         linha_total = {
             'data': '',
             'nome': '',
-            'produto': 'TOTAL',
+            'produto': 'SALDO DEVEDOR',
             'debito': df_base['debito'].sum(),
             'credito': df_base['credito'].sum(),
             'total': df_base['total'].sum(),

@@ -114,7 +114,7 @@ class DeleteInfo:
         cargo = self.entry_cargo.get()
         turma = self.entry_turma.get()
         try:
-            if self.apagar_db(datetime.strptime(data, '%d/%m/%Y'), nome, produto, cargo, turma):
+            if self.apagar_db(data, nome, produto, cargo, turma):
                 self.label_status.configure(text="Dados apagados no banco!")
             else:
                 self.label_status.configure(text="Favor revisar as informações a serem excluídas!")
@@ -136,6 +136,7 @@ class DeleteInfo:
 
     def apagar_db(self, data, nome, produto, cargo, turma):
         try:
+            data = datetime.strptime(data, '%d/%m/%Y')
             cursor, con = self.connect()
             query = """
                 DELETE FROM cantina

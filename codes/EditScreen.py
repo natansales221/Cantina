@@ -9,7 +9,7 @@ class EditInfo:
     @property
     def caminhos(self):
         return {
-            "excel": "Catina\\db\\controle_estoque.xlsx",
+            "excel": "Cantina\\db\\controle_estoque.xlsx",
             "database": "Cantina\\db\\database.db"
         }
 

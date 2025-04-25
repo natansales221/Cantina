@@ -9,8 +9,8 @@ class InsertInfo():
     @property
     def caminhos(self):
         return {
-            "excel": "Cantina\\db\\controle_estoque.xlsx",
-            "database": "Catina\\db\\database.db"
+            "excel": "db\controle_estoque.xlsx",
+            "database": "db\\database.db"
         }
     
     def __init__(self, tipo):
@@ -19,7 +19,7 @@ class InsertInfo():
         
         self.app = ctk.CTk()
         self.app.title("Inserção de informações")
-        self.app.geometry("800x600")
+        self.app.geometry("600x800")
 
         self.app.grid_columnconfigure(0, weight=1)
         self.app.grid_columnconfigure(1, weight=2)
@@ -137,15 +137,15 @@ class InsertInfo():
     def salvar_db(self):
         try:
             self.inserir(
-                self.entry_data.get(),
-                self.entry_nome.get(),
-                self.entry_produto.get(),
-                self.entry_debito.get(),
-                self.entry_credito.get(),
-                self.entry_cargo.get(),
-                self.entry_turma.get(),
-                self.entry_telefone.get(),
-                self.entry_obs.get()
+                data = self.entry_data.get(),
+                nome = self.entry_nome.get(),
+                produto = self.entry_produto.get(),
+                debito = self.entry_debito.get(),
+                credito = self.entry_credito.get() if self.entry_credito.get() > '0' else 0,
+                cargo = self.entry_cargo.get(),
+                turma = self.entry_turma.get(),
+                telefone = self.entry_telefone.get(),
+                observacao = self.entry_obs.get()
             )
             self.label_status.configure(text="Dados salvos no banco!")
         except Exception as e:
