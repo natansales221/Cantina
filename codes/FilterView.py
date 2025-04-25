@@ -54,7 +54,7 @@ class Filter(ctk.CTk):
             InterationUser(tipo=self.tipo).main()
 
     def obter_categorias(self):
-        conn = sqlite3.connect(r"Cantina\db\database.db")
+        conn = sqlite3.connect(r"db\database.db")
         cursor = conn.cursor()
         cursor.execute(f"SELECT * FROM cantina LIMIT 1")
         nomes_colunas = [desc[0] for desc in cursor.description]
@@ -64,7 +64,7 @@ class Filter(ctk.CTk):
     def carregar_produtos(self, event=None):
         filtro = self.entry_filtro.get()
         categoria = self.combo_categoria.get()
-        conn = sqlite3.connect(r'Cantina\db\database.db')
+        conn = sqlite3.connect(r'db\database.db')
         cursor = conn.cursor()
         cursor.execute(f'SELECT * FROM cantina LIMIT 1')
         nomes_colunas = [descricao[0] for descricao in cursor.description]
