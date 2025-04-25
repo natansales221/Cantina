@@ -9,7 +9,7 @@ class InsertInfo():
     @property
     def caminhos(self):
         return {
-            "excel": "db\controle_estoque.xlsx",
+            "excel": "db\\controle_estoque.xlsx",
             "database": "db\\database.db"
         }
     
