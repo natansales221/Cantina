@@ -15,7 +15,9 @@ class LoginService:
 
         self.entry_login = self.create_entry("Login", 0)
         self.entry_pswd = self.create_entry("Senha", 1, is_password=True)
-        
+        self.entry_pswd.bind("<Return>", self.login_bt)
+
+
         self.fgt_pswd = ctk.CTkButton(self.app, text="Esqueci a senha", command=self.lost_password)
         self.fgt_pswd.grid(row=10, column=1, padx=5, pady=5)
         
@@ -51,7 +53,7 @@ class LoginService:
         cursor = conn.cursor()        
         return cursor, conn
             
-    def login_bt(self):
+    def login_bt(self, event=True):
         cursor, con = self.connect()
         login = self.entry_login.get()
         password = self.entry_pswd.get()
@@ -81,7 +83,7 @@ class LoginService:
             self.label_status.configure(text="Login ou senha inválido!")
             
     def criar(self):
-        con = sqlite3.connect(r'Cantina\db\database.db')
+        con = sqlite3.connect(r'db\database.db')
         cursor = con.cursor()
 
         cursor.execute('''

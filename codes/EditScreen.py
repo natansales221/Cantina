@@ -9,8 +9,8 @@ class EditInfo:
     @property
     def caminhos(self):
         return {
-            "excel": "Cantina\\db\\controle_estoque.xlsx",
-            "database": "Cantina\\db\\database.db"
+            "excel": ".\\controle_estoque.xlsx",
+            "database": ".\\database.db"
         }
 
     def __init__(self, tipo):
