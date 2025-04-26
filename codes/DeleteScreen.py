@@ -19,7 +19,7 @@ class DeleteInfo:
 
         self.app = ctk.CTk()
         self.app.title("Exclusão de Informações")
-        self.app.geometry("500x400")
+        self.app.geometry("600x400")
 
         self.entry_data_var = ctk.StringVar()
         self.entry_data_var.trace_add("write", self.formatar_data)
@@ -28,13 +28,18 @@ class DeleteInfo:
         self.entry_nome = self.create_entry("Nome", 1)
         self.entry_produto = self.create_entry("Produto", 2)
         self.entry_cargo = self.create_entry("Cargo", 3)
-        self.entry_turma = self.create_entry("Turma", 4)
 
-        self.botao_db = ctk.CTkButton(self.app, text="Apagar informações", command=self.exclusao)
+
+        self.botao_db = ctk.CTkButton(self.app, text="Apagar dados acima", command=self.exclusao)
         self.botao_db.grid(row=10, column=0, padx=5, pady=5, sticky="ew")
+        self.botao_db.configure(fg_color="#993e02")
         
         self.botao_erase = ctk.CTkButton(self.app, text="Limpar campos", command=self.clear_fields)
         self.botao_erase.grid(row=10, column=1, padx=5, pady=5, sticky="ew")
+        
+        self.botao_erase_all = ctk.CTkButton(self.app, text="APAGAR TODAS AS INFORMAÇÕES", command=self.exclusao_geral)
+        self.botao_erase_all.grid(row=10, column=2, padx=5, pady=5, sticky="ew")
+        self.botao_erase_all.configure(width=200, fg_color="#990202")
         
         self.botao_voltar = ctk.CTkButton(self.app, text="Voltar", command=lambda: self.retornar(tipo))
         self.botao_voltar.grid(row=15, column=0, padx=5, pady=5, sticky="ew")
@@ -53,7 +58,7 @@ class DeleteInfo:
         label_widget.grid(row=row, column=0, sticky="ew", padx=5, pady=5)
 
         entry_var = var if var else ctk.StringVar()
-        entry = ctk.CTkEntry(self.app, textvariable=entry_var)
+        entry = ctk.CTkEntry(self.app, textvariable=entry_var, width=200)
         entry.grid(row=row, column=1, sticky="ew", padx=5, pady=5)
 
         return entry
@@ -81,7 +86,7 @@ class DeleteInfo:
         nome = self.entry_nome.get()
         cargo = self.entry_cargo.get()
         produto = self.entry_produto.get()
-        turma = self.entry_turma.get()
+
 
         arquivo_excel = self.caminhos['excel']
 
@@ -91,9 +96,8 @@ class DeleteInfo:
             filt_prod = filt_nome[filt_nome['Produto'].str.upper() == produto.upper()]
             filt_data = filt_prod[filt_prod['Data'] == datetime.strptime(data, '%d/%m/%Y')]
             filt_cargo = filt_data[filt_data['Cargo'].str.upper() == cargo.upper()]
-            filt_turma = filt_cargo[filt_cargo['Turma'].str.upper() == turma.upper()]
-            
-            df_filtrado = df_existente[~df_existente.index.isin(filt_turma.index)]
+  
+            df_filtrado = df_existente[~df_existente.index.isin(filt_cargo.index)]
             df_final = df_filtrado.reset_index(drop=True)
         else:
             df_final = pd.DataFrame([{
@@ -101,7 +105,6 @@ class DeleteInfo:
                 "Nome": nome,
                 "Produto": produto,
                 "Cargo": cargo,
-                "Turma": turma,
             }])
 
         df_final.to_excel(arquivo_excel, index=False)
@@ -112,9 +115,9 @@ class DeleteInfo:
         nome = self.entry_nome.get()
         produto = self.entry_produto.get()
         cargo = self.entry_cargo.get()
-        turma = self.entry_turma.get()
+
         try:
-            if self.apagar_db(data, nome, produto, cargo, turma):
+            if self.apagar_db(data, nome, produto, cargo):
                 self.label_status.configure(text="Dados apagados no banco!")
             else:
                 self.label_status.configure(text="Favor revisar as informações a serem excluídas!")
@@ -127,14 +130,14 @@ class DeleteInfo:
         self.entry_nome.delete(0, "end")
         self.entry_produto.delete(0, "end")
         self.entry_cargo.delete(0, "end")
-        self.entry_turma.delete(0, "end")
+
 
     def connect(self):
         con = sqlite3.connect(self.caminhos['database'])
         cursor = con.cursor()        
         return cursor, con
 
-    def apagar_db(self, data, nome, produto, cargo, turma):
+    def apagar_db(self, data, nome, produto, cargo):
         try:
             data = datetime.strptime(data, '%d/%m/%Y')
             cursor, con = self.connect()
@@ -144,9 +147,8 @@ class DeleteInfo:
                 AND nome = ?
                 AND produto = ?
                 AND cargo = ?
-                AND turma = ?
             """
-            params = (data, nome, produto, cargo, turma)
+            params = (data, nome, produto, cargo)
             
             if cursor.execute(query, params).connection.in_transaction:
                 con.commit()
@@ -192,5 +194,5 @@ class DeleteInfo:
         self.app.mainloop()
 
 if __name__ == '__main__':
-    service = DeleteInfo(tipo="user")
+    service = DeleteInfo()
     service.main()

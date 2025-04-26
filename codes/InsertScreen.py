@@ -35,13 +35,9 @@ class InsertInfo():
         self.entry_telefone = self.create_entry("Telefone", 7)
         self.entry_obs = self.create_entry("Observação", 8)
 
-        self.botao_db = ctk.CTkButton(self.app, text="Salvar Database", command=self.salvar_geral, font=("Calibri", 15))
+        self.botao_db = ctk.CTkButton(self.app, text="Salvar", command=self.salvar_geral, font=("Calibri", 15))
         self.botao_db.grid(row=10, column=0, padx=5, pady=5)
         self.botao_db.configure(width=200, hover_color="#228B22")
-
-        self.botao_excel = ctk.CTkButton(self.app, text="Salvar Excel", command=self.salvar_geral, font=("Calibri", 15))
-        self.botao_excel.grid(row=10, column=1, padx=5, pady=5)
-        self.botao_excel.configure(width=200, hover_color="#228B22")
 
         self.botao_erase = ctk.CTkButton(self.app, text="Limpar campos", command=self.clear_fields, font=("Calibri", 15))
         self.botao_erase.grid(row=10, column=2, padx=5, pady=5)
@@ -190,6 +186,7 @@ class InsertInfo():
         try:
             cursor, con = self.connect()
             data = datetime.strptime(data, '%d/%m/%Y')
+            
             total = str(int(credito) - int(debito))
             cursor.execute("""
                 INSERT INTO cantina (data, nome, produto, debito, credito, total, cargo, turma, telefone, observacao)

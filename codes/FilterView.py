@@ -68,23 +68,20 @@ class Filter(ctk.CTk):
         cursor = conn.cursor()
         cursor.execute(f'SELECT * FROM cantina LIMIT 1')
         nomes_colunas = [descricao[0] for descricao in cursor.description]
-
+            
         if categoria == "Todos":
             cursor.execute("SELECT * FROM cantina")
-        elif categoria == "data":
-            cursor.execute(f"SELECT * FROM cantina WHERE strftime('%d/%m/%Y', data) LIKE ?", (f"%{filtro}%",))
         else:
             cursor.execute(f"SELECT * FROM cantina WHERE {categoria} like ?", (f"%{filtro}%",))
-
         produtos = cursor.fetchall()
         df_base = pd.DataFrame(produtos, columns=nomes_colunas)
         self.listbox.tag_config("debito_color", foreground="#CD5C5C")
         self.listbox.tag_config("credito_color", foreground="#ADFF2F")
         self.listbox.tag_config("total_color", foreground="#87CEFA")
 
-        
+        # Não drope a coluna 'id'
         if 'data' in df_base.columns:
-            df_base['data'] = pd.to_datetime(df_base['data'], errors='coerce').dt.strftime('%d/%m/%Y')
+            df_base['data'] = pd.to_datetime(df_base['data'], errors='coerce').dt.strftime('%d-%m-%Y')
         colunas_monetarias = ['debito', 'credito', 'total']
         for coluna in colunas_monetarias:
             if coluna in df_base.columns:
@@ -148,5 +145,5 @@ class Filter(ctk.CTk):
         self.mainloop()
 
 if __name__ == "__main__":
-    app = Filter(tipo="user")
+    app = Filter()
     app.main()
