@@ -145,5 +145,5 @@ class Filter(ctk.CTk):
         self.mainloop()
 
 if __name__ == "__main__":
-    app = Filter(tipo="user")
+    app = Filter()
     app.main()
