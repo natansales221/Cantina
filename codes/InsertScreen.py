@@ -145,12 +145,13 @@ class InsertInfo():
                 data = self.entry_data.get(),
                 nome = self.entry_nome.get(),
                 produto = self.entry_produto.get(),
-                debito = self.entry_debito.get(),
-                credito = self.entry_credito.get() if self.entry_credito.get() > '0' else 0,
+                debito = self.entry_debito.get() if self.entry_debito.get() != '' else 0,
+                credito = self.entry_credito.get() if self.entry_credito.get() != '' else 0,
                 cargo = self.entry_cargo.get(),
                 turma = self.entry_turma.get(),
                 telefone = self.entry_telefone.get(),
                 observacao = self.entry_obs.get()
+                
             )
             self.label_status.configure(text="Dados salvos no banco!")
         except Exception as e:

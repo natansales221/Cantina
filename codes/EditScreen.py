@@ -141,7 +141,8 @@ class EditInfo:
         produto = self.entry_produto.get()
         debito = self.entry_debito.get()
         credito = self.entry_credito.get()
-        cargo = self.entry_cargo.get()        
+        cargo = self.entry_cargo.get()   
+             
         debito = debito if debito != '' else 0
         credito = credito if credito != '' else 0
         
@@ -187,7 +188,7 @@ class EditInfo:
         try:
             cursor, con = self.connect()
             data = datetime.strptime(data, '%d/%m/%Y')
-            total = str(int(credito) - int(debito)) if credito and debito else "0"
+            total = str(int(credito) - int(debito))
             query = """
                 UPDATE cantina 
                 SET debito = ?, credito = ?, total = ?
