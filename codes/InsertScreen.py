@@ -19,7 +19,7 @@ class InsertInfo():
         
         self.app = ctk.CTk()
         self.app.title("Inserção de informações")
-        self.app.geometry("600x800")
+        self.app.geometry("800x400")
 
         self.app.grid_columnconfigure(0, weight=1)
         self.app.grid_columnconfigure(1, weight=2)
@@ -35,20 +35,25 @@ class InsertInfo():
         self.entry_telefone = self.create_entry("Telefone", 7)
         self.entry_obs = self.create_entry("Observação", 8)
 
-        self.botao_db = ctk.CTkButton(self.app, text="Salvar Database", command=self.salvar_geral)
-        self.botao_db.grid(row=10, column=0, sticky="ew", padx=5, pady=5)
+        self.botao_db = ctk.CTkButton(self.app, text="Salvar Database", command=self.salvar_geral, font=("Calibri", 15))
+        self.botao_db.grid(row=10, column=0, padx=5, pady=5)
+        self.botao_db.configure(width=200, hover_color="#228B22")
 
-        self.botao_excel = ctk.CTkButton(self.app, text="Salvar Excel", command=self.salvar_geral)
-        self.botao_excel.grid(row=10, column=1, sticky="ew", padx=5, pady=5)
+        self.botao_excel = ctk.CTkButton(self.app, text="Salvar Excel", command=self.salvar_geral, font=("Calibri", 15))
+        self.botao_excel.grid(row=10, column=1, padx=5, pady=5)
+        self.botao_excel.configure(width=200, hover_color="#228B22")
 
-        self.botao_erase = ctk.CTkButton(self.app, text="Limpar campos", command=self.clear_fields)
-        self.botao_erase.grid(row=10, column=2, sticky="ew", padx=5, pady=5)
+        self.botao_erase = ctk.CTkButton(self.app, text="Limpar campos", command=self.clear_fields, font=("Calibri", 15))
+        self.botao_erase.grid(row=10, column=2, padx=5, pady=5)
+        self.botao_erase.configure(width=200, hover_color="#A0522D")
 
-        self.fgt_user = ctk.CTkButton(self.app, text="logout", command=self.deslogar)
-        self.fgt_user.grid(row=15, column=2, sticky="ew", padx=5, pady=5)
+        self.fgt_user = ctk.CTkButton(self.app, text="Logout", command=self.deslogar, font=("Calibri",15))
+        self.fgt_user.grid(row=15, column=2, padx=5, pady=5)
+        self.fgt_user.configure(width=200, hover_color="Dark Red")
 
-        self.back = ctk.CTkButton(self.app, text="Voltar", command= lambda: self.retornar(tipo))
-        self.back.grid(row=15, column=0, sticky="ew", padx=5, pady=5)
+        self.back = ctk.CTkButton(self.app, text="Voltar", command= lambda: self.retornar(tipo), font=("Calibri", 15))
+        self.back.grid(row=15, column=0, padx=5, pady=5)
+        self.back.configure(width=200, hover_color="Dark Red")
 
         self.label_status = ctk.CTkLabel(self.app, text="")
         self.label_status.grid(row=11, column=0, columnspan=3, sticky="ew")
@@ -200,5 +205,5 @@ class InsertInfo():
 
 
 if __name__ == '__main__':
-    service = InsertInfo()
+    service = InsertInfo(tipo="user")
     service.main()
