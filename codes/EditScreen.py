@@ -9,8 +9,8 @@ class EditInfo:
     @property
     def caminhos(self):
         return {
-            "excel": ".\\controle_estoque.xlsx",
-            "database": ".\\database.db"
+            "excel": "db\controle_estoque.xlsx",
+            "database": "db\database.db"
         }
 
     def __init__(self, tipo):
@@ -19,7 +19,7 @@ class EditInfo:
         
         self.app = ctk.CTk()
         self.app.title("Edição de informações")
-        self.app.geometry("600x600")
+        self.app.geometry("400x400")
         
         self.entry_data = self.create_entry("Data", 0)
         self.entry_nome = self.create_entry("Nome", 1)
@@ -27,19 +27,18 @@ class EditInfo:
         self.entry_debito = self.create_entry("Débito", 3)
         self.entry_credito = self.create_entry("Crédito", 4)
         self.entry_cargo = self.create_entry("Cargo", 5)
-        self.entry_turma = self.create_entry("Turma", 6)
 
         self.botao_db = ctk.CTkButton(self.app, text="Editar informações", command=self.salvar_geral)
-        self.botao_db.grid(row=10, column=0, columnspan=3, padx=10, pady=10, sticky="ew")
+        self.botao_db.grid(row=10, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 
         self.botao_erase = ctk.CTkButton(self.app, text="Limpar campos", command=self.clear_fields)
-        self.botao_erase.grid(row=11, column=0, columnspan=3, padx=10, pady=10, sticky="ew")
+        self.botao_erase.grid(row=10, column=2, padx=10, pady=10, sticky="ew")
 
         self.fgt_user = ctk.CTkButton(self.app, text="Logout", command=self.deslogar)
         self.fgt_user.grid(row=13, column=2, padx=10, pady=10, sticky="ew")
 
         self.back = ctk.CTkButton(self.app, text="Voltar", command=lambda: self.retornar(tipo))
-        self.back.grid(row=13, column=0, padx=10, pady=10, sticky="ew")
+        self.back.grid(row=13, column=0, columnspan=2, padx=10, pady=10, sticky="ew")
 
         self.label_status = ctk.CTkLabel(self.app, text="")
         self.label_status.grid(row=12, column=0, columnspan=3, pady=5, sticky="ew")
@@ -99,7 +98,9 @@ class EditInfo:
         cargo = self.entry_cargo.get()
         produto = self.entry_produto.get()
         debito = self.entry_debito.get()
-        turma = self.entry_turma.get()
+        
+        debito = debito if debito != '' else 0
+        credito = credito if credito != '' else 0
 
         novo_dado = pd.DataFrame([{
             "Data": datetime.strptime(data, '%d/%m/%Y'),
@@ -108,8 +109,7 @@ class EditInfo:
             "Débito": debito,
             "Crédito": 0 if credito == '' else credito,
             "Total": str(int(credito) - int(debito)),
-            "Cargo": cargo,
-            "Turma": turma,
+            "Cargo": cargo
         }])
 
         arquivo_excel = self.caminhos['excel']
@@ -120,21 +120,20 @@ class EditInfo:
             filt_prod = filt_nome[filt_nome['Produto'] == produto]
             filt_data = filt_prod[filt_prod['Data'] == datetime.strptime(data, '%d/%m/%Y')]
             filt_cargo = filt_data[filt_data['Cargo'] == cargo]
-            filt_turma = filt_cargo[filt_cargo['Turma'] == turma]
 
-            df_filtrado = df_existente[~(df_existente == filt_turma.iloc[0]).all(axis=1)]
+            df_filtrado = df_existente[~(df_existente == filt_cargo.iloc[0]).all(axis=1)]
 
-            filt_turma['Débito'] = debito
-            filt_turma['Crédito'] = 0 if credito == '' else credito
-            filt_turma['Total'] = str(int(credito) - int(debito))
+            filt_cargo['Débito'] = debito
+            filt_cargo['Crédito'] = 0 if credito == '' else credito
+            filt_cargo['Total'] = str(int(credito) - int(debito))
 
-            novo_dado = filt_turma
+            novo_dado = filt_cargo
             df_final = pd.concat([df_filtrado, novo_dado], ignore_index=True)
         else:
             df_final = novo_dado
 
         df_final.to_excel(arquivo_excel, index=False)
-        self.label_status.configure(text="Dados salvos no Excel!")
+        self.label_status.configure(text="Dados editados com sucesso!")
 
     def salvar_db(self):
         data = self.entry_data.get()
@@ -142,11 +141,13 @@ class EditInfo:
         produto = self.entry_produto.get()
         debito = self.entry_debito.get()
         credito = self.entry_credito.get()
-        cargo = self.entry_cargo.get()
-        turma = self.entry_turma.get()
+        cargo = self.entry_cargo.get()        
+        debito = debito if debito != '' else 0
+        credito = credito if credito != '' else 0
+        
         try:
-            if self.atualizar(data, nome, produto, debito, credito, cargo, turma):
-                self.label_status.configure(text="Dados salvos no banco!")
+            if self.atualizar(data, nome, produto, debito, credito, cargo):
+                self.label_status.configure(text="Dados editados com sucesso!")
             else:
                 self.label_status.configure(text="Favor revisar as informações a serem alteradas!")
         except Exception as e:
@@ -154,7 +155,7 @@ class EditInfo:
 
     def clear_fields(self):
         for entry in [self.entry_data, self.entry_nome, self.entry_produto, self.entry_debito,
-                      self.entry_credito, self.entry_cargo, self.entry_turma]:
+                      self.entry_credito, self.entry_cargo]:
             entry.delete(0, "end")
 
     def connect(self):
@@ -182,7 +183,7 @@ class EditInfo:
         con.commit()
         con.close()
 
-    def atualizar(self, data, nome, produto, debito, credito, cargo, turma):
+    def atualizar(self, data, nome, produto, debito, credito, cargo):
         try:
             cursor, con = self.connect()
             data = datetime.strptime(data, '%d/%m/%Y')
@@ -190,9 +191,9 @@ class EditInfo:
             query = """
                 UPDATE cantina 
                 SET debito = ?, credito = ?, total = ?
-                WHERE data = ? AND nome = ? AND produto = ? AND cargo = ? AND turma = ?
+                WHERE data = ? AND nome = ? AND produto = ? AND cargo = ?
             """
-            params = (debito, credito, total, data, nome, produto, cargo, turma)
+            params = (debito, credito, total, data, nome, produto, cargo)
             cursor.execute(query, params)
             atualizado = cursor.rowcount > 0
             con.commit()

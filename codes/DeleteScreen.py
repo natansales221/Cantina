@@ -158,7 +158,21 @@ class DeleteInfo:
         except Exception as e:
             print(f"Erro: {e}")
             raise
-
+        
+    def exclusao_geral(self):
+        try:
+            cursor, con = self.connect()
+            query = "DELETE FROM cantina"
+            cursor.execute(query)
+            con.commit()
+            return True
+        except Exception as e:
+            print(f"Erro ao limpar tabela: {e}")
+            raise
+        finally:
+            if con:
+                con.close()
+                
     def retornar(self, tipo):
         if tipo.upper() == 'ADMIN':
             from InterationAdmin import InterationAdmin
