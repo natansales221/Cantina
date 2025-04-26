@@ -211,5 +211,5 @@ class EditInfo:
 
 
 if __name__ == '__main__':
-    service = EditInfo()
+    service = EditInfo(tipo="user")
     service.main()
