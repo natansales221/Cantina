@@ -68,7 +68,7 @@ class Filter(ctk.CTk):
         cursor = conn.cursor()
         cursor.execute(f'SELECT * FROM cantina LIMIT 1')
         nomes_colunas = [descricao[0] for descricao in cursor.description]
-
+            
         if categoria == "Todos":
             cursor.execute("SELECT * FROM cantina")
         else:

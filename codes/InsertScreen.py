@@ -189,6 +189,7 @@ class InsertInfo():
         try:
             cursor, con = self.connect()
             data = datetime.strptime(data, '%d/%m/%Y')
+            
             total = str(int(credito) - int(debito))
             cursor.execute("""
                 INSERT INTO cantina (data, nome, produto, debito, credito, total, cargo, turma, telefone, observacao)
