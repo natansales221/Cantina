@@ -19,7 +19,7 @@ class InsertInfo():
         
         self.app = ctk.CTk()
         self.app.title("Inserção de informações")
-        self.app.geometry("800x400")
+        self.app.geometry("500x400")
 
         self.app.grid_columnconfigure(0, weight=1)
         self.app.grid_columnconfigure(1, weight=2)
@@ -205,5 +205,5 @@ class InsertInfo():
 
 
 if __name__ == '__main__':
-    service = InsertInfo(tipo="user")
+    service = InsertInfo()
     service.main()
