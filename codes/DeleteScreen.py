@@ -21,10 +21,7 @@ class DeleteInfo:
         self.app.title("Exclusão de Informações")
         self.app.geometry("600x400")
 
-        self.entry_data_var = ctk.StringVar()
-        self.entry_data_var.trace_add("write", self.formatar_data)
-
-        self.create_entry("Data", 0, self.entry_data_var)
+        self.entry_data = self.create_entry("Data", 0,)
         self.entry_nome = self.create_entry("Nome", 1)
         self.entry_produto = self.create_entry("Produto", 2)
         self.entry_cargo = self.create_entry("Cargo", 3)
@@ -53,19 +50,15 @@ class DeleteInfo:
         for i in range(12):
             self.app.rowconfigure(i, weight=1)
 
-    def create_entry(self, label, row, var=None):
-        label_widget = ctk.CTkLabel(self.app, text=label + ":")
-        label_widget.grid(row=row, column=0, sticky="ew", padx=5, pady=5)
-
-        entry_var = var if var else ctk.StringVar()
-        entry = ctk.CTkEntry(self.app, textvariable=entry_var, width=200)
-        entry.grid(row=row, column=1, sticky="ew", padx=5, pady=5)
-
+    def create_entry(self, label, row, default_value=""):
+        ctk.CTkLabel(self.app, text=label + ":").grid(row=row, column=0, sticky="ew", padx=5, pady=5)
+        entry = ctk.CTkEntry(self.app)
+        entry.grid(row=row, column=1, columnspan=2, sticky="ew", padx=5, pady=5)
+        entry.insert(0, default_value)
         return entry
 
     def formatar_data(self, *args):
-        """ Formata a entrada da data automaticamente (dd/mm/yyyy). """
-        texto = self.entry_data_var.get().replace("/", "")
+        texto = self.entry_data.get().replace("/", "")
         if len(texto) > 8:
             texto = texto[:8]
 
@@ -75,7 +68,8 @@ class DeleteInfo:
                 novo_texto += "/"
             novo_texto += char
 
-        self.entry_data_var.set(novo_texto)
+        self.entry_data.delete(0, 'end')
+        self.entry_data.insert(0, novo_texto)
 
     def exclusao(self):
         self.apagar()
@@ -191,7 +185,9 @@ class DeleteInfo:
         LoginService().main()
 
     def main(self):
+        self.entry_data.bind("<KeyRelease>", lambda e: self.formatar_data())
         self.app.mainloop()
+
 
 if __name__ == '__main__':
     service = DeleteInfo()

@@ -71,6 +71,8 @@ class Filter(ctk.CTk):
             
         if categoria == "Todos":
             cursor.execute("SELECT * FROM cantina")
+        elif categoria == "data":
+             cursor.execute(f"SELECT * FROM cantina WHERE strftime('%d/%m/%Y', data) LIKE ?", (f"%{filtro}%",))
         else:
             cursor.execute(f"SELECT * FROM cantina WHERE {categoria} like ?", (f"%{filtro}%",))
         produtos = cursor.fetchall()
@@ -79,9 +81,12 @@ class Filter(ctk.CTk):
         self.listbox.tag_config("credito_color", foreground="#ADFF2F")
         self.listbox.tag_config("total_color", foreground="#87CEFA")
 
-        # Não drope a coluna 'id'
+        if 'id' in df_base.columns:
+            df_base = df_base.drop(columns=["id"])
+            
         if 'data' in df_base.columns:
-            df_base['data'] = pd.to_datetime(df_base['data'], errors='coerce').dt.strftime('%d-%m-%Y')
+            df_base['data'] = pd.to_datetime(df_base['data'], errors='coerce').dt.strftime('%d/%m/%Y')
+            
         colunas_monetarias = ['debito', 'credito', 'total']
         for coluna in colunas_monetarias:
             if coluna in df_base.columns:
